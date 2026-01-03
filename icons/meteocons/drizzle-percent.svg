@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <!-- Mid-gray cloud -->
+    <linearGradient id="cloud" x1="22.56" x2="39.2" y1="21.96" y2="50.8" gradientUnits="userSpaceOnUse">
+		<stop offset="0" stop-color="#b5b5b5"/>
+		<stop offset=".45" stop-color="#9e9e9e"/>
+		<stop offset="1" stop-color="#7c7c7c"/>
+	</linearGradient>
+
+    <!-- Brighter drizzle drop gradient -->
+    <linearGradient id="drop" x1="23.31" x2="24.69" y1="44.3" y2="46.7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5aa2ff"/>
+      <stop offset=".45" stop-color="#4f97ff"/>
+      <stop offset="1" stop-color="#1f6fe6"/>
+    </linearGradient>
+
+    <!-- Reuse for other drops -->
+    <linearGradient id="drop2" href="#drop"/>
+    <linearGradient id="drop3" href="#drop"/>
+  </defs>
+
+  <!-- Cloud -->
+  <path fill="url(#cloud)" stroke="#e6effc" stroke-width=".5"
+        d="M46.5 31.5h-.32a10.49 10.49 0 00-19.11-8 7 7 0 00-10.57 6 7.21 7.21 0 00.1 1.14A7.5 7.5 0 0018 45.5h28a7 7 0 000-14z"/>
+
+  <!-- Drizzle drop 1 shadow -->
+  <path fill="none" stroke="rgba(0,0,0,0.35)" stroke-linecap="round" stroke-width="2.2"
+        transform="translate(1,1)"
+        d="M24.08 45.01l-.16.98"/>
+
+  <!-- Drizzle drop 1 -->
+  <path fill="none" stroke="url(#drop)" stroke-linecap="round" stroke-width="2.2"
+        d="M24.08 45.01l-.16.98">
+    <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite"
+                      type="translate" values="1 -5; -2 10"/>
+    <animate attributeName="opacity" dur="1.5s" repeatCount="indefinite"
+             values="0;1;1;0"/>
+  </path>
+
+  <!-- Drizzle drop 1 outline -->
+  <path fill="none" stroke="white" stroke-linecap="round" stroke-width="0.6"
+        d="M24.08 45.01l-.16.98"/>
+
+  <!-- Drizzle drop 2 shadow -->
+  <path fill="none" stroke="rgba(0,0,0,0.35)" stroke-linecap="round" stroke-width="2.2"
+        transform="translate(1,1)"
+        d="M31.08 45.01l-.16.98"/>
+
+  <!-- Drizzle drop 2 -->
+  <path fill="none" stroke="url(#drop2)" stroke-linecap="round" stroke-width="2.2"
+        d="M31.08 45.01l-.16.98">
+    <animateTransform attributeName="transform" begin="-0.5s" dur="1.5s"
+                      repeatCount="indefinite" type="translate"
+                      values="1 -5; -2 10"/>
+    <animate attributeName="opacity" begin="-0.5s" dur="1.5s"
+             repeatCount="indefinite" values="0;1;1;0"/>
+  </path>
+
+  <!-- Drizzle drop 2 outline -->
+  <path fill="none" stroke="white" stroke-linecap="round" stroke-width="0.6"
+        d="M31.08 45.01l-.16.98"/>
+
+  <!-- Drizzle drop 3 shadow -->
+  <path fill="none" stroke="rgba(0,0,0,0.35)" stroke-linecap="round" stroke-width="2.2"
+        transform="translate(1,1)"
+        d="M38.08 45.01l-.16.98"/>
+
+  <!-- Drizzle drop 3 -->
+  <path fill="none" stroke="url(#drop3)" stroke-linecap="round" stroke-width="2.2"
+        d="M38.08 45.01l-.16.98">
+    <animateTransform attributeName="transform" begin="-1s" dur="1.5s"
+                      repeatCount="indefinite" type="translate"
+                      values="1 -5; -2 10"/>
+    <animate attributeName="opacity" begin="-1s" dur="1.5s"
+             repeatCount="indefinite" values="0;1;1;0"/>
+  </path>
+
+  <!-- Drizzle drop 3 outline -->
+  <path fill="none" stroke="white" stroke-linecap="round" stroke-width="0.6"
+        d="M38.08 45.01l-.16.98"/>
+
+  <!-- Percent symbol shadow -->
+  <text x="32" y="40" text-anchor="middle"
+        font-size="20" font-weight="bold"
+        fill="rgba(0,0,0,0.35)"
+        transform="translate(1,1)">
+    %
+  </text>
+
+  <!-- Percent symbol -->
+  <text x="32" y="40" text-anchor="middle"
+        font-size="20" font-weight="bold"
+        fill="#5aa2ff"
+        stroke="white" stroke-width="3"
+        paint-order="stroke">
+    %
+  </text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+	<defs>
+		<linearGradient id="a" x1="14.8" x2="124.2" y1="42.3" y2="231.7" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#3392d6"/>
+			<stop offset=".5" stop-color="#3392d6"/>
+			<stop offset="1" stop-color="#2477b2"/>
+		</linearGradient>
+		<symbol id="b" viewBox="0 0 164 245.6">
+			<path fill="url(#a)" stroke="#2885c7" stroke-miterlimit="10" stroke-width="4" d="M82 3.6c-48.7 72-80 117-80 160.7s35.8 79.3 80 79.3 80-35.5 80-79.3S130.7 75.5 82 3.6Z">
+				<animateTransform additive="sum" attributeName="transform" calcMode="spline" dur="6s" keySplines=".42, 0, .58, 1; .42, 0, .58, 1" repeatCount="indefinite" type="scale" values="1 1; 1 .9; 1 1"/>
+			</path>
+		</symbol>
+	</defs>
+	<use xlink:href="#b" width="164" height="245.6" transform="translate(173.9 133.01)"/>
+	<!-- Centered thermometer with masked stem so bulb stays fully red -->
+	<g transform="translate(256 265) scale(1.15)">
+
+		<!-- Mask to hide stem inside the bulb -->
+		<mask id="thermoMask">
+			<rect x="-50" y="-120" width="200" height="260" fill="white"/>
+			<circle cx="0" cy="40" r="18" fill="black"/>
+		</mask>
+
+		<!-- Red bulb -->
+		<circle cx="0" cy="40" r="18" fill="#ff3b3b"/>
+
+		<!-- Taller white stem (extended upward only) -->
+		<!-- White stem (shortened to avoid bump) -->
+		<rect x="-6" y="-70" width="12" height="104" rx="6" fill="#fff" mask="url(#thermoMask)"/>
+
+		<!-- Taller red mercury column (extended upward to match) -->
+		<!-- Red mercury column (shortened to avoid bump) -->
+		<rect x="-3" y="-10" width="6" height="64" rx="3" fill="#ff3b3b"/>
+
+		<!-- Tick marks (compressed downward) -->
+		<!-- Tick marks (lightly compressed) -->
+		<g stroke="#fff" stroke-width="4" stroke-linecap="round">
+
+			<!-- Major ticks -->
+			<line x1="10" y1="15"  x2="20" y2="15"/>
+			<line x1="10" y1="-12" x2="20" y2="-12"/>
+			<line x1="10" y1="-39" x2="20" y2="-39"/>
+			<line x1="10" y1="-65" x2="20" y2="-65"/>  <!-- top of stem -->
+
+			<!-- Minor ticks -->
+			<line x1="10" y1="2"    x2="16" y2="2"/>
+			<line x1="10" y1="-26"  x2="16" y2="-26"/>
+			<line x1="10" y1="-52"  x2="16" y2="-52"/>
+
+		</g>
+
+	</g>
+</svg>

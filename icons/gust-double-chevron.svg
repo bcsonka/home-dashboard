@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 20">
+  <!-- Upper chevron -->
+  <polyline 
+    points="4,10 12,4 20,10"
+    fill="none"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round" />
+
+  <!-- Lower chevron (moved down for more spacing) -->
+  <polyline 
+    points="4,18 12,12 20,18"
+    fill="none"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round" />
+</svg>
