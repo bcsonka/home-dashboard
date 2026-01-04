@@ -20,12 +20,24 @@
             min-height: 100vh;
         }
 		
+		@keyframes slowPan {
+			0%   { background-position: 50% 50%; }
+			50%  { background-position: 52% 48%; }
+			100% { background-position: 50% 50%; }
+		}
+		
+		@keyframes bgBreath {
+			0%   { filter: brightness(1.00); }
+			50%  { filter: brightness(1.03); }
+			100% { filter: brightness(1.00); }
+		}
+		
 		body.snow-bg {
 			background:
 				linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
 				url("https://images.unsplash.com/photo-1732538477222-181db75d6cfe?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
 				center/cover no-repeat;
-			animation: none;
+			animation: slowPan 120s ease-in-out infinite, bgBreath 20s ease-in-out infinite;
 			color: #f0f0f0;
 		}
 		
@@ -34,7 +46,7 @@
 				linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
 				url("https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
 				center/cover no-repeat;
-			animation: none;
+			animation: slowPan 120s ease-in-out infinite, bgBreath 20s ease-in-out infinite;
 			color: #f0f0f0;
 		}
 		
@@ -43,7 +55,7 @@
 				linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
 				url("https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1200&auto=format&fit=crop")
 				center/cover no-repeat;
-			animation: none;
+			animation: slowPan 120s ease-in-out infinite, bgBreath 20s ease-in-out infinite;
 			color: #f0f0f0;
 		}
 
@@ -52,7 +64,7 @@
 				linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
 				url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200&auto=format&fit=crop")
 				center/cover no-repeat;
-			animation: none;
+			animation: slowPan 120s ease-in-out infinite, bgBreath 20s ease-in-out infinite;
 			color: #f0f0f0;
 		}
 		
@@ -61,7 +73,7 @@
 				linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
 				url("images/clear.jpg")
 				center/cover no-repeat;
-			animation: none;
+			animation: slowPan 120s ease-in-out infinite, bgBreath 20s ease-in-out infinite;
 			color: #f0f0f0;
 		}
 		
@@ -306,6 +318,7 @@
 			max-width: 1600px; /* keeps things centered on large TVs */
 			margin: 0 auto;
 			gap: 40px;
+			transition: transform 0.4s ease-out;
 		}
 
 		/* TOP ROW: centered stack */
@@ -513,6 +526,21 @@
 			"fog": "fog.svg",
 			"wind": "wind.svg"
 		};
+		
+		// --- PIXEL DRIFT (burn‑in protection) ---
+		const driftPositions = [
+		  { x: 0,  y: 0 },
+		  { x: 1,  y: 0 },
+		  { x: 1,  y: 1 },
+		  { x: 0,  y: 1 },
+		  { x: -1, y: 1 },
+		  { x: -1, y: 0 },
+		  { x: -1, y: -1 },
+		  { x: 0,  y: -1 },
+		  { x: 1,  y: -1 }
+		];
+		
+		let driftIndex = 0;
 
 		// Map METAR conditions to your icon keys
 		function mapMetarToIcon(condition, isDaytime) {
@@ -1056,26 +1084,38 @@
 				console.log("Forecast unavailable", err);
 			}
 		}
+		
+		function applyPixelDrift() {
+		  const el = document.querySelector(".dashboard");
+		  if (!el) return;
+
+		  const pos = driftPositions[driftIndex];
+		  el.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+
+		  driftIndex = (driftIndex + 1) % driftPositions.length;
+		}
 
 		document.addEventListener("DOMContentLoaded", () => {
+			// Load barometer SVG first
+			fetch("icons/barometer.svg")
+				.then(r => r.text())
+				.then(svg => {
+					document.querySelector(".barometer-gauge").innerHTML = svg;
+					updateWeather();
+				});
 
-		// Load barometer SVG first
-		fetch("icons/barometer.svg")
-			.then(r => r.text())
-			.then(svg => {
-				document.querySelector(".barometer-gauge").innerHTML = svg;
-				updateWeather();
-			});
+			updateClock();
+			setInterval(updateClock, 1000);
 
-		updateClock();
-		setInterval(updateClock, 1000);
+			// Remove the earlier updateWeather() call here
+			setInterval(updateWeather, 5 * 60 * 1000);
 
-		// Remove the earlier updateWeather() call here
-		setInterval(updateWeather, 5 * 60 * 1000);
+			updateForecast();
+			setInterval(updateForecast, 5 * 60 * 1000);
 
-		updateForecast();
-		setInterval(updateForecast, 5 * 60 * 1000);
-	});
+			// drift every 3 minutes
+			setInterval(applyPixelDrift, 3 * 60 * 1000);
+		});
 	</script>
 </head>
 
