@@ -806,12 +806,8 @@
 				// Normalize type
 				const type = (layer.type || "").toUpperCase();
 
-				// Normalize altitude
-				let alt = layer.altitude;
-				if (alt < 1000) alt = alt * 100; // convert hundreds → feet
-
 				// Only consider clouds below 20,000 ft
-				if (alt <= 20000) {
+				if (layer.altitude <= 20000) {
 					if (type === "OVC") hasOvercast = true;
 					else if (type === "BKN") hasBroken = true;
 					else if (type === "SCT") hasScattered = true;
