@@ -439,7 +439,7 @@
 			width: 80px;
 			object-fit: contain;
 			vertical-align: middle;
-			/*filter: brightness(1.5) contrast(1.25);*/
+			margin-right: -8px;
 		}
 		
 		.hl-icon.warm {
@@ -926,7 +926,7 @@
 				// High / Low from VC
 				const todayHigh = Math.round(vcData.days[0].tempmax);
 				const todayLow = Math.round(vcData.days[0].tempmin);
-				document.querySelector(".highlow").innerHTML = `<img src="icons/meteocons/thermometer-warmer.svg" class="hl-icon warm">${todayHigh}°<span class="hl-gap"></span><img src="icons/meteocons/thermometer-colder.svg" class="hl-icon cold">${todayLow}°`;
+				document.querySelector(".highlow").innerHTML = `<img src="icons/meteocons/thermometer-high.svg" class="hl-icon warm">${todayHigh}°<span class="hl-gap"></span><img src="icons/meteocons/thermometer-low.svg" class="hl-icon cold">${todayLow}°`;
 
 				// Temperature / Feels Like from VC (primary)
 				const temp = Math.round(vcData.currentConditions.temp);
