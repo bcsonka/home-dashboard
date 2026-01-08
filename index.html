@@ -757,10 +757,14 @@
 		function classifyMetarCondition(parsed) {
 			const codes = parsed.weatherCodes.join(" ");
 
+			// Real precip
 			if (/SN/.test(codes)) return "Snow";
 			if (/FZRA/.test(codes)) return "Freezing Rain";
 			if (/RA|DZ/.test(codes)) return "Rain";
-			if (/FG|BR|HZ/.test(codes)) return "Fog";
+
+			// Fog should NOT automatically override
+			// Remove FG/BR/HZ from here entirely
+			// We will handle fog separately using metarHasDenseFog
 
 			const clouds = parsed.clouds;
 			if (clouds.some(c => c.startsWith("OVC"))) return "Overcast";
@@ -878,6 +882,7 @@
 
 				//const lines = metarText.trim().split("\n");
 				//const metarLine = lines[lines.length - 1].trim();
+				console.log("metarLine", metarLine);
 				const metar = parseMETAR(metarLine);
 				const metarCondition = classifyMetarCondition(metar);
 				const parsedClouds = metar.clouds.map(parseCloudString);
@@ -932,18 +937,33 @@
 				document.querySelector(".temp").textContent = `${temp}°`;
 				document.querySelector(".feelslike").textContent = `Feels like ${feelsLike}°`;
 
-				// Determine if METAR has real precipitation
-				const metarHasPrecip =
-					/SN|RA|DZ|FZRA|PL|SG|IC|UP|BR|FG|HZ/.test(metar.weatherCodes.join(" "));
-
 				const isDaytime = vcData.currentConditions.icon?.includes("night") === false;
 
+				// 1. Compute fog logic
+				const metarHasRealPrecip = /SN|RA|DZ|FZRA|PL|SG|IC|UP/.test(metar.weatherCodes.join(" "));
+				const metarReportsFog = /FG|BR|HZ/.test(metar.weatherCodes.join(" "));
+				const visibilityLow = metar.visibilitySm !== null && metar.visibilitySm < 1;
+				const realFog = metarReportsFog && visibilityLow;
+
+				// 2. Start with METAR sky as default (will be overridden)
 				let effectiveDesc = metarSky;
 				let effectiveIcon = mapMetarToIcon(metarSky, isDaytime);
 
-				if (metarHasPrecip) {
+				// 3. Fog override FIRST (highest priority)
+				if (realFog) {
+					effectiveDesc = "Fog";
+					effectiveIcon = "fog";
+				}
+				// 4. Precip override SECOND
+				else if (metarHasRealPrecip) {
 					effectiveDesc = metarCondition;
 					effectiveIcon = mapMetarToIcon(metarCondition, isDaytime);
+				}
+				// 5. Otherwise trust VisualCrossing
+				else {
+					const vcDesc = vcData.currentConditions.conditions;
+					effectiveDesc = vcDesc;
+					effectiveIcon = mapMetarToIcon(vcDesc, isDaytime);
 				}
 
 				document.querySelector(".desc").textContent = effectiveDesc;
@@ -953,17 +973,19 @@
 				// Background logic
 				document.body.classList.remove("snow-bg", "clouds-bg", "rain-bg", "fog-bg");
 
-				if (metarHasPrecip) {
+				if (metarHasRealPrecip || realFog) {
+					// METAR overrides
 					if (metarCondition.includes("Snow")) document.body.classList.add("snow-bg");
 					else if (metarCondition.includes("Rain")) document.body.classList.add("rain-bg");
 					else if (metarCondition.includes("Fog")) document.body.classList.add("fog-bg");
 					else if (metarCondition.includes("Clear")) document.body.classList.add("clear-bg");
 					else if (metarCondition.includes("Cloud") || metarCondition.includes("Overcast")) document.body.classList.add("clouds-bg");
 				} else {
+					// Trust VisualCrossing
 					const descLower = vcData.currentConditions.conditions.toLowerCase();
 					if (descLower.includes("snow")) document.body.classList.add("snow-bg");
 					else if (descLower.includes("rain")) document.body.classList.add("rain-bg");
-					else if (descLower.includes("fog")) document.body.classList.add("fog-bg");					
+					else if (descLower.includes("fog")) document.body.classList.add("fog-bg");
 					else if (descLower.includes("clear")) document.body.classList.add("clear-bg");
 					else if (descLower.includes("cloud") || descLower.includes("overcast")) document.body.classList.add("clouds-bg");
 				}
