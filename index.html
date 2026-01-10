@@ -1011,15 +1011,18 @@
 				document.querySelector(".icon").src = `icons/meteocons/${iconMap[effectiveIcon] || "cloudy.svg"}`;
 
 				// Background logic
+				const bgVideoElement = document.getElementById("bg-video");
 				document.body.classList.remove("snow-bg", "clouds-bg", "rain-bg", "fog-bg");
-				document.getElementById("bg-video").style.display = "none";
+				bgVideoElement.style.display = "none";
+				bgVideoElement.style.filter = bgVideoElement.style.filter.replace(/brightness\([^)]*\)/, "").trim();
 
 				if (metarHasRealPrecip || realFog) {
 					// METAR overrides
 					if (metarCondition.includes("Snow")) {
 						/*document.body.classList.add("snow-bg");*/
-						document.getElementById("bg-video").src = "videos/snow.mp4";
-						document.getElementById("bg-video").style.removeProperty("display");
+						bgVideoElement.src = "videos/snow.mp4";
+						bgVideoElement.style.removeProperty("display");
+						bgVideoElement.style.filter = `${bgVideoElement.style.filter} brightness(1.3)`.trim();
 					}
 					else if (metarCondition.includes("Rain")) document.body.classList.add("rain-bg");
 					else if (metarCondition.includes("Fog")) document.body.classList.add("fog-bg");
@@ -1030,8 +1033,9 @@
 					const descLower = vcData.currentConditions.conditions.toLowerCase();
 					if (descLower.includes("snow")) {
 						/*document.body.classList.add("snow-bg");*/
-						document.getElementById("bg-video").src = "videos/snow.mp4";
-						document.getElementById("bg-video").style.removeProperty("display");
+						bgVideoElement.src = "videos/snow.mp4";
+						bgVideoElement.style.removeProperty("display");
+						bgVideoElement.style.filter = `${bgVideoElement.style.filter} brightness(1.3)`.trim();
 					}
 					else if (descLower.includes("rain")) document.body.classList.add("rain-bg");
 					else if (descLower.includes("fog")) document.body.classList.add("fog-bg");
