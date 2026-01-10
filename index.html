@@ -857,10 +857,10 @@
 		}
 		
 		function pressureToAngle(pressure) {
-			const MIN_PRESSURE = 28.00;
+			const MIN_PRESSURE = 25.00;
 			const MAX_PRESSURE = 32.00;
-			const MIN_ANGLE = 30;
-			const MAX_ANGLE = 55;
+			const MIN_ANGLE = -133;
+			const MAX_ANGLE = 133;
 
 			pressure = Math.max(MIN_PRESSURE, Math.min(MAX_PRESSURE, pressure));
 			const ratio = (pressure - MIN_PRESSURE) / (MAX_PRESSURE - MIN_PRESSURE);
