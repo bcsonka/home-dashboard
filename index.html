@@ -851,6 +851,18 @@
 
 			return "steady";
 		}
+		
+		function getWindSpeedDesc(windMph) {
+			if(windMph <= 3) return "calm";
+			else if(windMph <= 7) return "low";
+			else if(windMph <= 15) return "moderate";
+			else return "high";
+		}
+		
+		function getWindsockIcon(windMph) {
+			const windSpeedDesc = getWindSpeedDesc(windMph);
+			return `windsock-${windSpeedDesc}.svg`;
+		}
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -998,7 +1010,7 @@
 				const windMph = knotsToMph(metar.windSpeedKts || 0);
 				const gustMph = metar.windGustKts ? knotsToMph(metar.windGustKts) : null;
 
-				const windsockIcon = windMph < 10 ? "windsock-weak.svg" : "windsock.svg";
+				const windsockIcon = getWindsockIcon(windMph);
 				document.querySelector(".wind-icon").src = `icons/meteocons/${windsockIcon}`;
 				document.querySelector(".wind-arrow").style.transform = `translate(-50%, -50%) rotate(${windDir}deg)`;
 				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null ? degreesToCompassDirection(windDir) : ""}`;
