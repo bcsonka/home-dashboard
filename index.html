@@ -1013,14 +1013,14 @@
 				document.querySelector(".gps").innerHTML = `<img src="icons/location-gps.svg" class="location-gps"> ${gpsCoordinates}`;
 
 				// Wind from METAR
-				const windDir = metar.windDirDeg != null ? metar.windDirDeg : 0;
-				const windMph = knotsToMph(metar.windSpeedKts || 0);
+				const windDir = metar.windDirDeg ?? 0;
+				const windMph = knotsToMph(metar.windSpeedKts ?? 0);
 				const gustMph = metar.windGustKts ? knotsToMph(metar.windGustKts) : null;
 
 				const windsockIcon = getWindsockIcon(windMph);
 				document.querySelector(".wind-icon").src = `icons/meteocons/${windsockIcon}`;
 				document.querySelector(".wind-arrow").style.transform = `translate(-50%, -50%) rotate(${windDir}deg)`;
-				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null ? degreesToCompassDirection(windDir) : ""}`;
+				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null && windMph > 0 ? degreesToCompassDirection(windDir) : ""}`;
 
 				if (gustMph != null && gustMph > windMph) {
 					document.querySelector(".wind-gust").innerHTML = `<img src="icons/meteocons/wind.svg" class="gust-icon"> ${Math.round(gustMph)} mph`;
