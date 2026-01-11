@@ -5,7 +5,7 @@
     <title>Home Dashboard</title>
 	
 	<!-- Preconnect to improve loading speed in 2026 -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	
 	<!-- Example: Loading Inter for data and Montserrat for headings -->
@@ -18,6 +18,7 @@
 			animation: gradientShift 30s ease infinite;
             color: #fff;
             font-family: "Inter", sans-serif;
+			font-weight: 400;
             margin: 0;
             padding: 0;
             display: flex;
@@ -98,7 +99,7 @@
 
         .time {
             font-size: 120px;
-            font-weight: 200;
+            font-weight: 300;
             letter-spacing: -2px;
 			display: inline-block;
 			transition: opacity 0.25s ease, transform 0.25s ease;
@@ -250,13 +251,6 @@
 			margin-top: 5px;
 			margin-bottom: -30px;
 			opacity: 0.85;
-		}
-		
-		.date {
-			transition: opacity 0.35s ease;
-		}
-		.date.fade-out {
-			opacity: 0;
 		}
 		
 		.wind {
@@ -685,10 +679,6 @@
 
 		// --- METAR HELPERS ---
 
-		function cToF(c) {
-			return c * 9 / 5 + 32;
-		}
-
 		function knotsToMph(knots) {
 			return knots * 1.15078;
 		}
@@ -1075,7 +1065,7 @@
 				
 				// Dewpoint (°F)
 				if (metar.dewpointC != null) {
-					const dewF = Math.round(cToF(metar.dewpointC));
+					const dewF = Math.round(toFahrenheit(metar.dewpointC));
 					document.querySelector(".dewpoint-value").textContent = `${dewF}°`;
 				} else {
 					document.querySelector(".dewpoint-value").textContent = `--°`;
