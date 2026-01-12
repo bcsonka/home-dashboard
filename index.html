@@ -937,8 +937,8 @@
 		}
 		
 		function formatMD(dateStr) {
-			const d = new Date(dateStr);
-			return `${d.getMonth() + 1}/${d.getDate()}`;
+			const [year, month, day] = dateStr.split("-").map(Number);
+			return `${month}/${day}`;
 		}
 		
 		function renderMultiDayConditions(days, count = 5) {
