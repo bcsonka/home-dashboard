@@ -1106,7 +1106,12 @@
 					}
 					else if (metarCondition.includes("Rain")) document.body.classList.add("rain-bg");
 					else if (metarCondition.includes("Fog")) document.body.classList.add("fog-bg");
-					else if (metarCondition.includes("Clear")) document.body.classList.add("clear-bg");
+					else if (metarCondition.includes("Clear")) {
+						//document.body.classList.add("clear-bg");
+						bgVideoElement.src = "videos/clear3.mp4";
+						bgVideoElement.style.removeProperty("display");
+						bgVideoElement.style.filter = `${bgVideoElement.style.filter} brightness(1.3)`.trim();
+					}
 					else if (metarCondition.includes("Cloud")) document.body.classList.add("clouds-bg");
 					else if (metarCondition.includes("Overcast")) {
 						bgVideoElement.src = "videos/overcast.mp4";
@@ -1124,7 +1129,12 @@
 					}
 					else if (descLower.includes("rain")) document.body.classList.add("rain-bg");
 					else if (descLower.includes("fog")) document.body.classList.add("fog-bg");
-					else if (descLower.includes("clear")) document.body.classList.add("clear-bg");
+					else if (descLower.includes("clear")) {
+						//document.body.classList.add("clear-bg");
+						bgVideoElement.src = "videos/clear3.mp4";
+						bgVideoElement.style.removeProperty("display");
+						bgVideoElement.style.filter = `${bgVideoElement.style.filter} brightness(1.3)`.trim();
+					}
 					else if (descLower.includes("cloud")) document.body.classList.add("clouds-bg");
 					else if (descLower.includes("overcast")) {
 						bgVideoElement.src = "videos/overcast.mp4";
