@@ -30,11 +30,13 @@
 		
 		body::before {
 			content: "";
-			position: fixed;
+			position: absolute;
 			top: 0;
 			left: 0;
-			width: 100vw;
-			height: 100vh;
+			width: 100%;
+			height: 100%;
+			min-height: 100vh;
+			pointer-events: none;
 			background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.55));
 			z-index: -1; /* above video, below content */
 		}
@@ -359,6 +361,7 @@
 
 		/* BOTTOM ROW: forecast strip */
 		.bottom-row {
+			margin-top: -16px;
 			display: flex;
 			flex-direction: column;   /* THIS is the fix */
 			justify-content: center;
@@ -530,6 +533,53 @@
 			object-fit: cover;
 			z-index: -2; /* behind everything */
 		}
+		
+		.multi-day-conditions {
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+			margin-top: 20px;
+			width: 100%;
+		}
+
+		.multi-day-item {
+			width: 80px;
+			text-align: center;
+			/*font-size: 22px;*/
+		}
+
+		.multi-day-item .cond-icon {
+			width: 50px;
+			height: 50px;
+			object-fit: contain;
+			margin: 6px 0;
+		}
+
+		.multi-day-item .temps {
+			opacity: 0.9;
+		}
+		
+		.multi-day-item .precip {
+			opacity: 0.85;
+			margin-top: 4px;
+		}
+
+		.multi-day-item .cond-text {
+			opacity: 0.75;
+			margin-top: 2px;
+			text-transform: capitalize;
+		}
+		
+		.precip-icon {
+			margin-top: -4px;
+			width: 28px;
+			height: 28px;
+			object-fit: contain;
+			opacity: 0.9;
+			vertical-align: middle;
+			position: relative;
+		}
+
     </style>
 
     <script>
@@ -885,6 +935,46 @@
 			const windSpeedDesc = getWindSpeedDesc(windMph);
 			return `windsock-${windSpeedDesc}.svg`;
 		}
+		
+		function formatMD(dateStr) {
+			const d = new Date(dateStr);
+			return `${d.getMonth() + 1}/${d.getDate()}`;
+		}
+		
+		function renderMultiDayConditions(days, count = 5) {
+			const container = document.querySelector(".multi-day-conditions");
+			if (!container) return;
+
+			container.innerHTML = "";
+
+			const nextDays = days.slice(1, 1 + count);
+
+			nextDays.forEach(day => {
+				const date = formatMD(day.datetime);
+
+				const iconKey = mapMetarToIcon(day.conditions, true);
+				const iconFile = iconMap[iconKey] || "cloudy.svg";
+
+				const high = Math.round(day.tempmax);
+				const low = Math.round(day.tempmin);
+
+				const precip = Math.round(day.precipprob || 0);
+				const condText = day.conditions;
+
+				const div = document.createElement("div");
+				div.className = "multi-day-item";
+
+				div.innerHTML = `
+					<div>${date}</div>
+					<img class="cond-icon" src="icons/meteocons/${iconFile}">
+					<div class="temps">${high}°/${low}°</div>
+					<div class="precip"><img class="precip-icon" src="icons/meteocons/rain-percent.svg">${precip}%</div>
+					<!--div class="cond-text">${condText}</div-->
+				`;
+
+				container.appendChild(div);
+			});
+		}
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -1080,6 +1170,8 @@
 				} else {
 					document.querySelector(".dewpoint-value").textContent = `--°`;
 				}
+				
+				renderMultiDayConditions(vcData.days, 5);
 			} catch (err) {
 				console.log(err);
 				document.querySelector(".desc").textContent = "Weather unavailable";
@@ -1276,6 +1368,7 @@
     <div class="bottom-row">
 		<div class="forecast outline"></div>
 		<div class="precip-prob outline"></div>
+		<div class="multi-day-conditions"></div>
 	</div>
 </div>
 </body>
