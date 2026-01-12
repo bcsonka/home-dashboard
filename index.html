@@ -1089,7 +1089,7 @@
 		async function updateForecast() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
 			const address = "4653 6 Mile Road, Northfield Township, MI 48178-9637";
-			const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(address)}?unitGroup=us&key=${apiKey}&contentType=json`;
+			const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(address)}/next5days?unitGroup=us&key=${apiKey}&contentType=json&include=current,hours,days`;
 
 			try {
 				const response = await fetch(url);
