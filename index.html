@@ -542,14 +542,13 @@
 		.multi-day-item {
 			width: 80px;
 			text-align: center;
-			/*font-size: 22px;*/
 		}
 
 		.multi-day-item .cond-icon {
 			width: 50px;
 			height: 50px;
 			object-fit: contain;
-			margin: 6px 0;
+			margin-top: -4px;
 		}
 
 		.multi-day-item .temps {
@@ -569,14 +568,57 @@
 		
 		.precip-icon {
 			margin-top: -4px;
-			width: 28px;
-			height: 28px;
+			width: 36px;
+			height: 36px;
 			object-fit: contain;
 			opacity: 0.9;
 			vertical-align: middle;
 			position: relative;
 		}
 
+		.hourly-forecast {
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+			width: 100%;
+			margin-top: 20px;
+		}
+
+		.hourly-item {
+			width: 80px;
+			text-align: center;
+		}
+
+		.hourly-item .hour-icon {
+			width: 50px;
+			height: 50px;
+			object-fit: contain;
+			margin-top: -4px;
+		}
+
+		.hourly-item .hour-temp {
+			opacity: 0.9;
+		}
+		
+		.hour-precip {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			/*font-size: 18px;*/
+			opacity: 0.85;
+			margin-top: 4px;
+		}
+
+		.hour-precip-icon {
+			margin-top: -4px;
+			width: 36px;
+			height: 36px;
+			object-fit: contain;
+			opacity: 0.9;
+			vertical-align: middle;
+			position: relative;
+		}
     </style>
 
     <script>
@@ -1225,34 +1267,19 @@
 					const icon = entry.icon;
 
 					const item = document.createElement("div");
-					item.className = "forecast-item";
+					item.className = "hourly-item";
 
 					item.innerHTML = `
-						<div>${time}</div>
-						<img src="icons/meteocons/${iconMap[icon] || "cloud.svg"}">
-						<div>${temp}°</div>
+						<div class="hour-time">${time}</div>
+						<img class="hour-icon" src="icons/meteocons/${iconMap[icon] || "cloudy.svg"}">
+						<div class="hour-temp">${Math.round(entry.temp)}°</div>
+						<div class="hour-precip">
+							<img class="hour-precip-icon" src="icons/meteocons/rain-percent.svg">
+							${Math.round(entry.precipprob)}%
+						</div>
 					`;
 
 					container.appendChild(item);
-				});
-				
-				// --- PRECIP PROBABILITY ROW ---
-				const precipContainer = document.querySelector(".precip-prob");
-				precipContainer.innerHTML = "";
-
-				nextHours.forEach(entry => {
-					const precip = Math.round(entry.precipprob || 0);
-					const icon = precip >= 20 ? "rain-percent.svg" : "drizzle-percent.svg"; // subtle icon choice
-
-					const item = document.createElement("div");
-					item.className = "precip-prob-item";
-
-					item.innerHTML = `
-						<img src="icons/meteocons/${icon}">
-						<div>${precip}%</div>
-					`;
-
-					precipContainer.appendChild(item);
 				});
 			} catch (err) {
 				console.log("Forecast unavailable", err);
