@@ -631,9 +631,13 @@
 			"drizzle": "drizzle.svg",
 			"overcast": "overcast.svg",
 			"rain": "rain.svg",
+			"heavy-rain": "extreme-rain.svg",
 			"snow": "snow.svg",
 			"fog": "fog.svg",
-			"wind": "wind.svg"
+			"wind": "wind.svg",
+			"thundersnow": "thunderstorms-snow.svg",
+			"thunderstorm": "thunderstorms.svg",
+			"thunderstorm-rain": "thunderstorms-rain.svg"
 		};
 		
 		// --- PIXEL DRIFT (burn‑in protection) ---
@@ -651,24 +655,36 @@
 		
 		let driftIndex = 0;
 
-		// Map METAR conditions to your icon keys
 		function mapMetarToIcon(condition, isDaytime) {
 			const c = condition.toLowerCase();
 
-			// Light rain → drizzle icon
+			// --- Thunderstorms ---
+			if (c.includes("thundersnow")) return "thundersnow";
+			if (c.includes("thunderstorm with rain")) return "thunderstorm-rain";
+			if (c.includes("thunderstorm")) return "thunderstorm";
+
+			// --- Heavy Rain ---
+			if (c.includes("heavy rain")) return "heavy-rain";
+
+			// --- Light Rain ---
 			if (c.includes("light rain")) return "drizzle";
 
-			// Rain (moderate or heavy)
+			// --- Normal Rain ---
 			if (c.includes("rain") || c.includes("drizzle") || c.includes("freezing")) return "rain";
 
+			// --- Snow ---
 			if (c.includes("snow")) return "snow";
+
+			// --- Fog ---
 			if (c.includes("fog") || c.includes("mist") || c.includes("haze")) return "fog";
 
+			// --- Clouds ---
 			if (c.includes("overcast")) return "overcast";
 			if (c.includes("cloud")) {
 				return isDaytime ? "partly-cloudy-day" : "partly-cloudy-night";
 			}
 
+			// --- Clear ---
 			return isDaytime ? "clear-day" : "clear-night";
 		}
 		
@@ -866,17 +882,32 @@
 		function classifyMetarCondition(parsed) {
 			const codes = parsed.weatherCodes.join(" ");
 
-			// Real precip
-			if (/SN/.test(codes)) return "Snow";
+			// --- Granular Snow ---
+			if (codes.includes("+SN")) return "Heavy Snow";
+			if (codes.includes("-SN")) return "Light Snow";
+			if (/\bSHSN\b/.test(codes)) return "Snow Showers";
+			if (/\bBLSN\b/.test(codes)) return "Blowing Snow";
+			if (/\bSG\b/.test(codes)) return "Flurries";
+			if (/\bIC\b/.test(codes)) return "Ice Crystals";
+			if (/\bSN\b/.test(codes)) return "Snow"; // default (moderate)
+
+			// --- Freezing Rain / Ice ---
 			if (/FZRA/.test(codes)) return "Freezing Rain";
+
+			// --- Rain ---
 			if (codes.includes("-RA")) return "Light Rain";
 			if (codes.includes("+RA")) return "Heavy Rain";
 			if (codes.includes("RA") || codes.includes("DZ")) return "Rain";
+			
+			if (codes.includes("TSGR")) return "Thunderstorm with Hail";
+			if (codes.includes("TSRA")) return "Thunderstorm with Rain";
+			if (codes.includes("TSSN")) return "Thundersnow";
+			if (codes.includes("TS")) return "Thunderstorm";
+			if (codes.includes("VCTS")) return "Nearby Thunderstorms";
 
-			// Fog should NOT automatically override
-			// Remove FG/BR/HZ from here entirely
-			// We will handle fog separately using metarHasDenseFog
+			// Fog handled elsewhere — do NOT classify here
 
+			// --- Clouds ---
 			const clouds = parsed.clouds;
 			if (clouds.some(c => c.startsWith("OVC"))) return "Overcast";
 			if (clouds.some(c => c.startsWith("BKN"))) return "Mostly Cloudy";
