@@ -7,6 +7,8 @@
 	<!-- Preconnect to improve loading speed in 2026 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
 
 	<style>
         body {
@@ -204,14 +206,6 @@
 				 2px  2px 0 #000;
 		}
 		
-		.sun-times {
-			margin-top: -12px;
-			margin-left: 24px;
-			font-size: 28px;
-			display: flex;
-			gap: 40px;
-			/*opacity: 0.9;*/
-		}
 		
 		.sun-icon {
 			height: 72px;
@@ -223,7 +217,7 @@
 		
 		.highlow {
 			font-size: 28px;
-			margin-top: 14px;
+			margin-top: 10px;
 		}
 		
 		.feelslike {
@@ -618,6 +612,53 @@
 			opacity: 0.9;
 			vertical-align: middle;
 			position: relative;
+		}
+		
+		.astro-container {
+			display: flex;
+			flex-direction: column;
+			gap: 0px;
+			margin-left: 12px;
+			margin-top: -20px;
+			width: 100%; 
+			align-items: center; 
+		}
+
+		.sun-times {
+			display: grid;
+			grid-template-columns: 220px 220px; 
+			gap: 20px; 
+			font-size: 28px;
+			width: 460px; 
+			white-space: nowrap;
+			/* No margin-bottom here */
+		}
+
+		.moon-times {
+			display: grid;
+			grid-template-columns: 220px 220px; 
+			gap: 20px; 
+			font-size: 28px;
+			width: 460px; 
+			white-space: nowrap;
+			
+			/* ADJUST THIS VALUE: A negative margin pulls this row UP */
+			margin-top: -20px; 
+		}
+
+		/* This ensures the icon and text stay on one line no matter what */
+		.sun-times > div,
+		.moon-times > div {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-width: 0; /* Prevents flexbox from forcing a wrap */
+		}
+
+		.sun-icon {
+			flex-shrink: 0; /* Prevents the icon from getting squashed */
+			height: 72px;
+			width: 72px;
 		}
     </style>
 
@@ -1046,6 +1087,20 @@
 				container.appendChild(div);
 			});
 		}
+		
+		function updateSunMoonTimes(latitude, longitude) {
+			const now = new Date();
+			const localeTimeOptions = {hour: 'numeric', minute:'2-digit'};
+			
+			const sunTimes = SunCalc.getTimes(now, latitude, longitude);
+			document.getElementById('sunrise').innerText = sunTimes.sunrise.toLocaleTimeString([], localeTimeOptions);
+			document.getElementById('sunset').innerText = sunTimes.sunset.toLocaleTimeString([], localeTimeOptions);
+
+			const moonTimes = SunCalc.getMoonTimes(now, latitude, longitude);			
+			document.getElementById('moonrise').innerText = moonTimes.rise ? moonTimes.rise.toLocaleTimeString([], localeTimeOptions) : "N/A";
+			document.getElementById('moonset').innerText = moonTimes.set ? moonTimes.set.toLocaleTimeString([], localeTimeOptions) : "N/A";
+		}
+
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -1110,7 +1165,9 @@
 				} else {
 					pressureTrendIcon.style.display = "none";
 				}
-
+				
+				updateSunMoonTimes(vcData.latitude, vcData.longitude);
+/**
 				// Sunrise / Sunset from VC
 				const sunriseStr = to12Hour(vcData.currentConditions.sunrise.slice(0, 5));
 				const sunsetStr = to12Hour(vcData.currentConditions.sunset.slice(0, 5));
@@ -1119,7 +1176,38 @@
 					`<img class="sun-icon" src="icons/meteocons/sunrise.svg"> ${sunriseStr}`;
 				document.querySelector(".sunset").innerHTML =
 					`<img class="sun-icon" src="icons/meteocons/sunset.svg"> ${sunsetStr}`;
+					
+				// --- Moonrise / Moonset via SunCalc ---
+				const lat = vcData.latitude;
+				const lon = vcData.longitude;
 
+				const moonTimes = SunCalc.getMoonTimes(new Date(), lat, lon);
+
+				// SunCalc returns JS Date objects or null
+				let moonriseStr = "—";
+				let moonsetStr  = "—";
+
+				if (moonTimes.rise) {
+					moonriseStr = moonTimes.rise.toLocaleTimeString([], {
+						hour: "numeric",
+						minute: "2-digit"
+					});
+				}
+
+				if (moonTimes.set) {
+					moonsetStr = moonTimes.set.toLocaleTimeString([], {
+						hour: "numeric",
+						minute: "2-digit"
+					});
+				}
+
+				// Update UI
+				document.querySelector(".moonrise").innerHTML =
+					`<img class="sun-icon" src="icons/meteocons/moonrise.svg"><span>${moonriseStr}</span>`;
+
+				document.querySelector(".moonset").innerHTML =
+					`<img class="sun-icon" src="icons/meteocons/moonset.svg"><span>${moonsetStr}</span>`;
+**/
 				// High / Low from VC
 				const todayHigh = Math.round(vcData.days[0].tempmax);
 				const todayLow = Math.round(vcData.days[0].tempmin);
@@ -1422,10 +1510,17 @@
 				</div>
 			</div>
 
-			<!-- MOVED HERE -->
-			<div class="sun-times outline">
-				<div class="sunrise"></div>
-				<div class="sunset"></div>
+			<div class="astro-container">
+				<div class="sun-times outline">
+					<div class="uv-index"></div>
+					<div><img src="icons/meteocons/sunrise.svg" class="sun-icon"><span id="sunrise">--:--</span></div>
+					<div><img src="icons/meteocons/sunset.svg" class="sun-icon"><span id="sunset">--:--</span></div>
+				</div>
+
+				<div class="moon-times outline">
+					<div><img src="icons/meteocons/moonrise.svg" class="sun-icon"><span id="moonrise">--:--</span></div>
+					<div><img src="icons/meteocons/moonset.svg" class="sun-icon"><span id="moonset">--:--</span></div>
+				</div>
 			</div>
 		</div>
     </div>
