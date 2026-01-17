@@ -626,24 +626,24 @@
 
 		.sun-times {
 			display: grid;
-			grid-template-columns: 220px 220px; 
+			grid-template-columns: 80px 220px 220px;
 			gap: 20px; 
 			font-size: 28px;
-			width: 460px; 
+			width: 520px; 
 			white-space: nowrap;
 			/* No margin-bottom here */
 		}
 
 		.moon-times {
 			display: grid;
-			grid-template-columns: 220px 220px; 
+			grid-template-columns: 80px 220px 220px;
 			gap: 20px; 
 			font-size: 28px;
-			width: 460px; 
+			width: 520px; 
 			white-space: nowrap;
 			
 			/* ADJUST THIS VALUE: A negative margin pulls this row UP */
-			margin-top: -20px; 
+			margin-top: -16px; 
 		}
 
 		/* This ensures the icon and text stay on one line no matter what */
@@ -659,6 +659,18 @@
 			flex-shrink: 0; /* Prevents the icon from getting squashed */
 			height: 72px;
 			width: 72px;
+		}
+		
+		.uv-icon {
+			flex-shrink: 0; /* Prevents the icon from getting squashed */
+			height: 56px;
+			width: 56px;
+		}
+		
+		.moon-phase-icon {
+			flex-shrink: 0; /* Prevents the icon from getting squashed */
+			height: 56px;
+			width: 56px;
 		}
     </style>
 
@@ -1100,7 +1112,49 @@
 			document.getElementById('moonrise').innerText = moonTimes.rise ? moonTimes.rise.toLocaleTimeString([], localeTimeOptions) : "N/A";
 			document.getElementById('moonset').innerText = moonTimes.set ? moonTimes.set.toLocaleTimeString([], localeTimeOptions) : "N/A";
 		}
+		
+		function updateUVIndexIcon(uvIndex) {
+			const uvIcon = document.querySelector(".uv-icon");
 
+			if (uvIndex !== null && uvIndex !== undefined) {
+				const uvIndexVal = Math.round(uvIndex);
+				
+				let uvIconFilename = "uv-index.svg"; // Default (used for 0 or fallback)
+
+				if (uvIndexVal >= 11) {
+					uvIconFilename = "uv-index-11-plus.svg";
+				} else if (uvIndexVal >= 1) {
+					uvIconFilename = `uv-index-${uvIndexVal}.svg`;
+				} 
+				// If uvIndexVal is 0, it stays "uv-index.svg" (base icon)
+
+				uvIcon.src = `icons/meteocons/${uvIconFilename}`;
+				uvIcon.title = `UV Index ${uvIndexVal}`
+			} else {
+				uvIcon.src = "icons/meteocons/uv-index.svg";
+				uvIcon.removeAttribute('title');
+			}
+		}
+
+		function updateMoonPhaseIcon(moonPhaseValue) {
+			let iconName = "";
+			if (moonPhaseValue === 0 || moonPhaseValue === 1) iconName = "new";
+			else if (moonPhaseValue < 0.25) iconName = "waxing-crescent";
+			else if (moonPhaseValue === 0.25) iconName = "first-quarter";
+			else if (moonPhaseValue < 0.5) iconName = "waxing-gibbous";
+			else if (moonPhaseValue === 0.5) iconName = "full";
+			else if (moonPhaseValue < 0.75) iconName = "waning-gibbous";
+			else if (moonPhaseValue === 0.75) iconName = "last-quarter";
+			else iconName = "waning-crescent";
+			
+			let icon = document.querySelector('.moon-phase-icon');
+			icon.src = `icons/meteocons/moon-${iconName}.svg`;
+			
+			let iconDescription = iconName.split("-")
+									.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+									.join(" ");
+			icon.title = iconDescription;			
+		}
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -1167,47 +1221,9 @@
 				}
 				
 				updateSunMoonTimes(vcData.latitude, vcData.longitude);
-/**
-				// Sunrise / Sunset from VC
-				const sunriseStr = to12Hour(vcData.currentConditions.sunrise.slice(0, 5));
-				const sunsetStr = to12Hour(vcData.currentConditions.sunset.slice(0, 5));
-
-				document.querySelector(".sunrise").innerHTML =
-					`<img class="sun-icon" src="icons/meteocons/sunrise.svg"> ${sunriseStr}`;
-				document.querySelector(".sunset").innerHTML =
-					`<img class="sun-icon" src="icons/meteocons/sunset.svg"> ${sunsetStr}`;
-					
-				// --- Moonrise / Moonset via SunCalc ---
-				const lat = vcData.latitude;
-				const lon = vcData.longitude;
-
-				const moonTimes = SunCalc.getMoonTimes(new Date(), lat, lon);
-
-				// SunCalc returns JS Date objects or null
-				let moonriseStr = "—";
-				let moonsetStr  = "—";
-
-				if (moonTimes.rise) {
-					moonriseStr = moonTimes.rise.toLocaleTimeString([], {
-						hour: "numeric",
-						minute: "2-digit"
-					});
-				}
-
-				if (moonTimes.set) {
-					moonsetStr = moonTimes.set.toLocaleTimeString([], {
-						hour: "numeric",
-						minute: "2-digit"
-					});
-				}
-
-				// Update UI
-				document.querySelector(".moonrise").innerHTML =
-					`<img class="sun-icon" src="icons/meteocons/moonrise.svg"><span>${moonriseStr}</span>`;
-
-				document.querySelector(".moonset").innerHTML =
-					`<img class="sun-icon" src="icons/meteocons/moonset.svg"><span>${moonsetStr}</span>`;
-**/
+				updateUVIndexIcon(vcData.currentConditions.uvindex);
+				updateMoonPhaseIcon(vcData.currentConditions.moonphase);
+				
 				// High / Low from VC
 				const todayHigh = Math.round(vcData.days[0].tempmax);
 				const todayLow = Math.round(vcData.days[0].tempmin);
@@ -1512,11 +1528,13 @@
 
 			<div class="astro-container">
 				<div class="sun-times outline">
+					<div><img src="icons/meteocons/uv-index.svg" class="uv-icon"></div>
 					<div><img src="icons/meteocons/sunrise.svg" class="sun-icon"><span id="sunrise">--:--</span></div>
 					<div><img src="icons/meteocons/sunset.svg" class="sun-icon"><span id="sunset">--:--</span></div>
 				</div>
 
 				<div class="moon-times outline">
+					<div><img src="icons/meteocons/not-available.svg" class="moon-phase-icon"></div>
 					<div><img src="icons/meteocons/moonrise.svg" class="sun-icon"><span id="moonrise">--:--</span></div>
 					<div><img src="icons/meteocons/moonset.svg" class="sun-icon"><span id="moonset">--:--</span></div>
 				</div>
