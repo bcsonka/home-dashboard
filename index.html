@@ -1113,7 +1113,32 @@
 			document.getElementById('moonset').innerText = moonTimes.set ? moonTimes.set.toLocaleTimeString([], localeTimeOptions) : "N/A";
 		}
 		
-		function updateUVIndexIcon(uvIndex) {
+		async function getUVIndexValue(latitude, longitude, vcUVIndex) {
+			try {
+				const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=uv_index&timezone=auto`;
+				const resp = await fetch(url);
+				const data = await resp.json();
+				return data.current.uv_index;
+			} catch(e) {
+				console.log("Open-Meteo UV fetch failed, falling back to Visual Crossing UV", e);
+				return vcUVIndex;
+			}
+		}
+		
+		function updateUVIndexIcon(uvIndex, latitude, longitude, cloudCover) {
+			// SMART SANITY CHECK (Works for all seasons)
+			// We use SunCalc to find how high the sun is (altitude) in degrees.
+			const now = new Date();
+			const sunPos = SunCalc.getPosition(now, latitude, longitude);
+			const sunAltDeg = sunPos.altitude * (180 / Math.PI); // Convert radians to degrees
+			
+			// If the sun is LOW (< 30 degrees) AND it is CLOUDY (> 70%),
+			// the UV simply cannot physically be high.
+			// This catches Winter days and Summer evenings.
+			if (sunAltDeg < 30 && cloudCover > 70 && uvIndex > 1) {
+				uvIndex = 1;
+			}
+			
 			const uvIcon = document.querySelector(".uv-icon");
 
 			if (uvIndex !== null && uvIndex !== undefined) {
@@ -1180,6 +1205,7 @@
 				}
 
 				const vcData = await vcResponse.json();
+				console.log("vcData.currentConditions", vcData.currentConditions);
 				const latDMS = toDMS(vcData.latitude, true);
 				const lonDMS = toDMS(vcData.longitude, false);
 				const gpsCoordinates = `${latDMS}, ${lonDMS}`;
@@ -1221,7 +1247,8 @@
 				}
 				
 				updateSunMoonTimes(vcData.latitude, vcData.longitude);
-				updateUVIndexIcon(vcData.currentConditions.uvindex);
+				const uvIndex = await getUVIndexValue(vcData.latitude, vcData.longitude, vcData.currentConditions.uvindex);
+				updateUVIndexIcon(uvIndex, vcData.latitude, vcData.longitude, vcData.currentConditions.cloudcover);
 				updateMoonPhaseIcon(vcData.currentConditions.moonphase);
 				
 				// High / Low from VC
