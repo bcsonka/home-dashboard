@@ -1246,7 +1246,7 @@
 				// High / Low from VC
 				const todayHigh = Math.round(vcData.days[0].tempmax);
 				const todayLow = Math.round(vcData.days[0].tempmin);
-				document.querySelector(".highlow").innerHTML = `<img src="icons/meteocons/thermometer-high.svg" class="hl-icon warm">${todayHigh}°<span class="hl-gap"></span><img src="icons/meteocons/thermometer-low.svg" class="hl-icon cold">${todayLow}°`;
+				document.querySelector(".highlow").innerHTML = `<img src="icons/meteocons/thermometer-high.svg" class="hl-icon warm" title="Today's High Temp">${todayHigh}°<span class="hl-gap"></span><img src="icons/meteocons/thermometer-low.svg" class="hl-icon cold" title="Today's Low Temp">${todayLow}°`;
 
 				// Temperature / Feels Like from VC (primary)
 				const temp = Math.round(vcData.currentConditions.temp);
@@ -1456,7 +1456,9 @@
 			fetch("icons/barometer.svg")
 				.then(r => r.text())
 				.then(svg => {
-					document.querySelector(".barometer-gauge").innerHTML = svg;
+					let barometerGauge = document.querySelector(".barometer-gauge");
+					barometerGauge.innerHTML = svg;
+					barometerGauge.title = "Barometer";
 					updateWeather();
 				});
 
@@ -1529,12 +1531,12 @@
 			<div class="humidity-dewpoint-row">
 
 				<div class="humidity-block">
-					<img src="icons/meteocons/humidity.svg" class="humidity-icon" />
+					<img src="icons/meteocons/humidity.svg" class="humidity-icon" title="Humidity"/>
 					<span class="humidity-value outline">--%</span>
 				</div>
 
 				<div class="dewpoint-block">
-					<img src="icons/meteocons/dewpoint.svg" class="dewpoint-icon" />
+					<img src="icons/meteocons/dewpoint.svg" class="dewpoint-icon" title="Dewpoint"/>
 					<span class="dewpoint-value outline">--°</span>
 				</div>
 
@@ -1548,14 +1550,14 @@
 			<div class="astro-container">
 				<div class="sun-times outline">
 					<div><img src="icons/meteocons/uv-index.svg" class="uv-icon"></div>
-					<div><img src="icons/meteocons/sunrise.svg" class="sun-icon"><span id="sunrise">--:--</span></div>
-					<div><img src="icons/meteocons/sunset.svg" class="sun-icon"><span id="sunset">--:--</span></div>
+					<div><img src="icons/meteocons/sunrise.svg" class="sun-icon" title="Sunrise"><span id="sunrise">--:--</span></div>
+					<div><img src="icons/meteocons/sunset.svg" class="sun-icon" title="Sunset"><span id="sunset">--:--</span></div>
 				</div>
 
 				<div class="moon-times outline">
 					<div><img src="icons/meteocons/not-available.svg" class="moon-phase-icon"></div>
-					<div><img src="icons/meteocons/moonrise.svg" class="sun-icon"><span id="moonrise">--:--</span></div>
-					<div><img src="icons/meteocons/moonset.svg" class="sun-icon"><span id="moonset">--:--</span></div>
+					<div><img src="icons/meteocons/moonrise.svg" class="sun-icon" title="Moonrise"><span id="moonrise">--:--</span></div>
+					<div><img src="icons/meteocons/moonset.svg" class="sun-icon" title="Moonset"><span id="moonset">--:--</span></div>
 				</div>
 			</div>
 		</div>
