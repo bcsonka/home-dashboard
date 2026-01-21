@@ -1080,7 +1080,22 @@
 				const snowAmt = day.snow || 0;
 				const precipAmt = day.precip || 0;
 
-				// 2. Decide what to display
+				// --- NEW: Determine Precip Icon with Temp Check ---
+				let precipIconFilename = "rain-percent.svg";
+				
+				// Check 1: Does the API explicitly say snow OR is there accumulation?
+				const isExplicitSnow = snowAmt > 0.1 || (day.preciptype && day.preciptype.includes("snow"));
+				
+				// Check 2: Physics check. If the High Temp is <= 37°F, assume snow.
+				// Even if the API is unsure, rain is unlikely if the high is 37.
+				const isColdEnough = day.tempmax <= 37;
+
+				if (isExplicitSnow || isColdEnough) {
+					precipIconFilename = "snow-percent.svg";
+				}
+				// --------------------------------------------------
+
+				// 2. Decide what text to display
 				let precipHtml = `${precipProb}%`;
 				
 				// If snow is significant (> 0.1"), show snow amount
@@ -1100,7 +1115,7 @@
 					<img class="cond-icon" src="icons/meteocons/${iconFile}">
 					<div class="temps">${high}° / ${low}°</div>
 					<div class="precip">
-						<img class="precip-icon" src="icons/meteocons/rain-percent.svg">
+						<img class="precip-icon" src="icons/meteocons/${precipIconFilename}">
 						<div style="display:inline-block; vertical-align:middle; line-height: 1.1;">
 							${precipHtml}
 						</div>
@@ -1443,6 +1458,23 @@
 					const temp = Math.round(entry.temp);
 					const icon = entry.icon;
 
+					// --- UPDATED LOGIC START ---
+					let hourlyPrecipIcon = "rain-percent.svg";
+
+					// Check 1: Does the API explicitly say snow?
+					// Always trust the API first if it has an opinion.
+					const isSnowType = entry.preciptype && entry.preciptype.includes("snow");
+
+					// Check 2: Temperature Fallback
+					// If the API doesn't specify, assume snow if it's 37°F or colder.
+					// 32°F is too strict; snow often falls in the 33-37°F range.
+					const isColdEnoughForSnow = entry.temp <= 37;
+
+					if (isSnowType || (entry.preciptype === null && isColdEnoughForSnow)) {
+						hourlyPrecipIcon = "snow-percent.svg";
+					}
+					// --- UPDATED LOGIC END ---
+
 					const item = document.createElement("div");
 					item.className = "hourly-item";
 
@@ -1451,7 +1483,7 @@
 						<img class="hour-icon" src="icons/meteocons/${iconMap[icon] || "cloudy.svg"}">
 						<div class="hour-temp">${Math.round(entry.temp)}°</div>
 						<div class="hour-precip">
-							<img class="hour-precip-icon" src="icons/meteocons/rain-percent.svg">
+							<img class="hour-precip-icon" src="icons/meteocons/${hourlyPrecipIcon}">
 							${Math.round(entry.precipprob)}%
 						</div>
 					`;
