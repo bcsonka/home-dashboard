@@ -145,21 +145,18 @@
         .weather-row {
             display: flex;
             align-items: center;
-            gap: 20px;
-			margin-top: 12px;
+            row-gap: 20px;
+			column-gap: 10px;
+			margin-top: 8px;
         }
 		
 		.weather-row img {
 			object-fit: contain;
 		}
 
-        .temp {
-            font-size: 48px;
-           /* font-weight: 300;*/
-        }
-
+        
         .desc {
-			margin-top: 8px;
+			/*margin-top: 12px;*/
             font-size: 32px;
             /*opacity: 0.8;*/
             text-transform: capitalize;
@@ -196,7 +193,7 @@
 			height: 100px;
 			width: 100px;
 			object-fit: contain;
-			margin-top: -16px;
+			/*margin-top: -16px;*/
 		}
 
 		.forecast-item img {
@@ -227,11 +224,40 @@
 			margin-top: 10px;
 		}
 		
-		.feelslike {
-			font-size: 20px;
-			margin-top: -5px;
-			margin-bottom: 16px;
+		/* --- UPDATED STYLES for Temp & Feels Like --- */
+
+		/* Wrapper to hold [Main Temp] and [Feels Like Group] side-by-side */
+		.temp-group {
+			display: flex;
+			align-items: center; /* Vertically center the big number and the icon group */
+			gap: 20px;           /* Space between 72° and the feels-like section */
+		}
+
+		.temp {
+			margin-left: -12px;
+			font-size: 48px;
+			line-height: 1;
+		}
+
+		/* Wrapper for [Icon] [FeelsLike Temp] */
+		.feelslike-info {
+			display: flex;
+			align-items: center;
+			/*gap: 4px;*/            /* Space between the small icon and small number */
 			opacity: 0.9;
+			margin-top: -8px;     /* Slight nudge down to align visually with the center of the big temp */
+		}
+
+		.feelslike-icon {
+			height: 72px;
+			width: 72px;
+		}
+
+		.feelslike-temp {
+			font-size: 24px;
+			margin-left: -20px;
+			margin-top: 8px;
+			line-height: 1;
 		}
 		
 		.meta {
@@ -384,9 +410,11 @@
 		}
 		.wind-speed {
 			font-size: 32px;
+			margin-top: -4px;
 		}
 		.wind-gust {
-			font-size: 20px;
+			margin-top: -4px;
+			font-size: 24px;
 		}
 		
 		.humidity-icon,
@@ -1282,12 +1310,27 @@
 				const todayLow = Math.round(vcData.days[0].tempmin);
 				document.querySelector(".highlow").innerHTML = `<img src="icons/meteocons/thermometer-high.svg" class="hl-icon warm" title="Today's High Temp">${todayHigh}°<span class="hl-gap"></span><img src="icons/meteocons/thermometer-low.svg" class="hl-icon cold" title="Today's Low Temp">${todayLow}°`;
 
-				// Temperature / Feels Like from VC (primary)
+				// Temperature / Feels Like from VC
 				const temp = Math.round(vcData.currentConditions.temp);
 				const feelsLike = Math.round(vcData.currentConditions.feelslike);
 
 				document.querySelector(".temp").textContent = `${temp}°`;
-				document.querySelector(".feelslike").textContent = `Feels like ${feelsLike}°`;
+				document.querySelector(".feelslike-temp").textContent = `${feelsLike}°`;
+
+				// --- NEW: Dynamic Feels Like Icon ---
+				const flIcon = document.querySelector(".feelslike-icon");
+				let flFilename = "feels-like.svg"; // Default (Silver)
+
+				if (feelsLike < temp) {
+					// It feels colder than it actually is (Wind Chill) -> BLUE
+					flFilename = "feels-like-cooler.svg";
+				} else if (feelsLike > temp) {
+					// It feels warmer than it actually is (Heat Index) -> RED
+					flFilename = "feels-like-warmer.svg";
+				}
+				// If they are equal, it stays Silver
+
+				flIcon.src = `icons/meteocons/${flFilename}`;
 
 				const isDaytime = vcData.currentConditions.icon?.includes("night") === false;
 
@@ -1553,9 +1596,16 @@
         <div class="left-col">
 			<div class="weather-row">
 				<img class="icon" />
-				<div>
+				
+				<!-- ADDED class="temp-group" HERE -->
+				<div class="temp-group">
 					<div class="temp outline"></div>
-					<div class="feelslike outline"></div>
+					
+					<div class="feelslike-info outline">
+						<img class="feelslike-icon" title="Feels Like Temp">
+						<!-- Temp is now to the right of the icon -->
+						<div class="feelslike-temp"></div>
+					</div>
 				</div>
 			</div>
 
@@ -1609,7 +1659,7 @@
 				</div>
 
 				<div class="moon-times outline">
-					<div><img src="icons/meteocons/not-available.svg" class="moon-phase-icon"></div>
+					<div><img class="moon-phase-icon"></div>
 					<div><img src="icons/meteocons/moonrise.svg" class="sun-icon" title="Moonrise"><span id="moonrise">--:--</span></div>
 					<div><img src="icons/meteocons/moonset.svg" class="sun-icon" title="Moonset"><span id="moonset">--:--</span></div>
 				</div>
