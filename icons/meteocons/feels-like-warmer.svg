@@ -17,21 +17,65 @@
 			<stop offset="1" stop-color="#ff0000" stop-opacity="0"/>
 		</linearGradient>
 	</defs>
-	<!-- Thermometer Glass -->
-	<path fill="url(#glassGrad)" stroke="#cccccc" stroke-width="0.5" stroke-miterlimit="10" d="M24 16a5 5 0 00-5 5v16.32a9 9 0 1010 0V21a5 5 0 00-5-5z"/>
-	<!-- Thermometer Fluid (Red) -->
-	<circle cx="24" cy="44" r="6" fill="url(#fluidGrad)"/>
-	<path fill="url(#fluidGrad)" d="M21 24h6v20h-6z"/>
-	<!-- Glass Highlights -->
-	<path fill="none" stroke="white" stroke-linecap="round" stroke-width="1" opacity="0.8" d="M22 19v12 M21.5 41a3 3 0 002 4"/>
-	<!-- Radiating Wave 1 -->
-	<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
-		<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
-		<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0s"/>
-	</path>
-	<!-- Radiating Wave 2 -->
-	<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
-		<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-		<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-	</path>
+	<!-- SWEATING PERSON (Left Side) -->
+	<g transform="translate(0, -2)">
+		<!-- Animation: Heavy Breathing (Scale Up/Down) -->
+		<!-- TRANSFORM ORIGIN set to 12 53 (The Feet) so they stay planted on the ground line -->
+		<animateTransform attributeName="transform" type="scale" values="1 1; 1.03 1.03; 1 1" dur="2s" repeatCount="indefinite" additive="sum" transform-origin="12 53"/>
+		<!-- Head (Lowered to y=25) -->
+		<circle cx="12" cy="25" r="3.2" fill="#ffffff"/>
+		<!-- Sweat Drop 1 (Flying off forehead) -->
+		<path d="M13 23 Q 13 20 15 23" fill="#67e8f9" opacity="0">
+			<animate attributeName="d" values="M13 23 Q 13 20 13 23; M13 23 Q 16 24 16 28" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+			<animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+		</path>
+		<!-- Sweat Drop 2 (Dripping down face) -->
+		<path d="M10 23 Q 10 20 10 23" fill="#67e8f9" opacity="0">
+			<animate attributeName="d" values="M10 23 Q 10 20 10 23; M10 23 Q 9 28 9 31" dur="1.5s" repeatCount="indefinite" begin="0.8s"/>
+			<animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.8s"/>
+		</path>
+		<!-- T-Shirt Body (Lowered to y=29, Height reduced to 12) -->
+		<rect x="8" y="29" width="8" height="12" rx="1" fill="url(#fluidGrad)"/>
+		<!-- Left Arm Group -->
+		<!-- Sleeve (Red) - Attached to body at x=8 -->
+		<path d="M8 30 L 6 33" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Bare Arm (White) - Straight down -->
+		<path d="M6 33 L 6 40" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Right Arm Group -->
+		<!-- Sleeve (Red) - Attached to body at x=16 -->
+		<path d="M16 30 L 18 33" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Bare Arm (White) - Straight down -->
+		<path d="M18 33 L 18 40" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Shorts (Lowered to y=41, Height 6) -->
+		<rect x="8" y="41" width="8" height="6" fill="url(#fluidGrad)"/>
+		<!-- Gap between legs -->
+		<path d="M12 47 L 12 44" stroke="#2a2a40" stroke-width="1"/>
+		<!-- Legs (White/Skin) - Start y=47, End y=53 -->
+		<path d="M9.5 47 L 9.5 53" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+		<path d="M14.5 47 L 14.5 53" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+		<!-- Feet (Red/Shoes) - Planted at y=53 -->
+		<path d="M9.5 53 L 7.5 53" stroke="url(#fluidGrad)" stroke-width="2" stroke-linecap="round"/>
+		<path d="M14.5 53 L 16.5 53" stroke="url(#fluidGrad)" stroke-width="2" stroke-linecap="round"/>
+	</g>
+	<!-- THERMOMETER GROUP (Shifted Right) -->
+	<g transform="translate(14, 0)">
+		<!-- Thermometer Glass (Bottom at approx y=53) -->
+		<path fill="url(#glassGrad)" stroke="#e6effc" stroke-width="0.5" stroke-miterlimit="10" d="M24 16a5 5 0 00-5 5v16.32a9 9 0 1010 0V21a5 5 0 00-5-5z"/>
+		<!-- Thermometer Fluid (Red) -->
+		<circle cx="24" cy="44" r="6" fill="url(#fluidGrad)"/>
+		<!-- Stem: HIGH level (y=20) -->
+		<path fill="url(#fluidGrad)" d="M21 20h6v24h-6z"/>
+		<!-- Glass Highlights -->
+		<path fill="none" stroke="white" stroke-linecap="round" stroke-width="1" opacity="0.8" d="M22 19v12 M21.5 41a3 3 0 002 4"/>
+		<!-- Radiating Wave 1 -->
+		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
+			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0s"/>
+		</path>
+		<!-- Radiating Wave 2 -->
+		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
+			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+		</path>
+	</g>
 </svg>
