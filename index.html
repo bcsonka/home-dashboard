@@ -1429,6 +1429,7 @@
 				const windSpeedDesc = getWindSpeedDesc(windMph);
 				windsockIcon.title = "Wind Speed - " + windSpeedDesc.charAt(0).toUpperCase() + windSpeedDesc.slice(1);
 				document.querySelector(".wind-arrow").style.transform = `translate(-50%, -50%) rotate(${windDir}deg)`;
+				document.querySelector(".wind-compass").title = `Wind Origin - ${windDir}°`;
 				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null && windMph > 0 ? degreesToCompassDirection(windDir) : ""}`;
 
 				if (gustMph != null && gustMph > windMph) {
@@ -1615,7 +1616,7 @@
 			<div class="wind">
 				<img class="wind-icon">
 
-				<div class="wind-compass" title="Wind Origin">
+				<div class="wind-compass">
 					<img src="icons/compass.svg">
 					<img class="wind-arrow" src="icons/arrow4.svg">
 				</div>
