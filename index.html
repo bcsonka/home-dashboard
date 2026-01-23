@@ -1197,15 +1197,13 @@
 
 			if (uvIndex !== null && uvIndex !== undefined) {
 				const uvIndexVal = Math.round(uvIndex);
-				
-				let uvIconFilename = "uv-index.svg"; // Default (used for 0 or fallback)
+				let uvIconFilename = "uv-index.svg";
 
-				if (uvIndexVal >= 11) {
+				if (uvIndexVal > 11) {
 					uvIconFilename = "uv-index-11-plus.svg";
-				} else if (uvIndexVal >= 1) {
+				} else if (uvIndexVal >= 0) {
 					uvIconFilename = `uv-index-${uvIndexVal}.svg`;
-				} 
-				// If uvIndexVal is 0, it stays "uv-index.svg" (base icon)
+				}
 
 				uvIcon.src = `icons/meteocons/${uvIconFilename}`;
 				uvIcon.title = `UV Index - ${uvIndexVal}`
@@ -1653,7 +1651,7 @@
 
 			<div class="astro-container">
 				<div class="sun-times outline">
-					<div><img src="icons/meteocons/uv-index.svg" class="uv-icon"></div>
+					<div><img class="uv-icon"></div>
 					<div><img src="icons/meteocons/sunrise.svg" class="sun-icon" title="Sunrise"><span id="sunrise">--:--</span></div>
 					<div><img src="icons/meteocons/sunset.svg" class="sun-icon" title="Sunset"><span id="sunset">--:--</span></div>
 				</div>
