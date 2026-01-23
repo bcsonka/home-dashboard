@@ -250,7 +250,6 @@
 
 		.feelslike-temp {
 			font-size: 32px;
-			margin-left: -4px;
 			margin-top: 8px;
 			line-height: 1;
 		}
@@ -1432,7 +1431,7 @@
 				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null && windMph > 0 ? degreesToCompassDirection(windDir) : ""}`;
 
 				if (gustMph != null && gustMph > windMph) {
-					document.querySelector(".wind-gust").innerHTML = `<img src="icons/meteocons/wind.svg" class="gust-icon"> ${Math.round(gustMph)} mph`;
+					document.querySelector(".wind-gust").innerHTML = `<img src="icons/meteocons/wind.svg" class="gust-icon" title="Wind Gusts"> ${Math.round(gustMph)} mph`;
 				} else {
 					document.querySelector(".wind-gust").textContent = "";
 				}
