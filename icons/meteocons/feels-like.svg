@@ -6,10 +6,20 @@
 			<stop offset="0.5" stop-color="#f0f0f0"/>
 			<stop offset="1" stop-color="#d0d0d0"/>
 		</linearGradient>
-		<!-- Fluid Gradient (Silver/Mercury) -->
+		<!-- Mercury Gradient (Darker Steel Silver) -->
 		<linearGradient id="fluidGrad" x1="21.5" y1="41" x2="26.5" y2="46" gradientUnits="userSpaceOnUse">
-			<stop offset="0" stop-color="#dcdcdc"/>
-			<stop offset="1" stop-color="#777777"/>
+			<stop offset="0" stop-color="#b0b0b0"/>
+			<stop offset="1" stop-color="#606060"/>
+		</linearGradient>
+		<!-- Shirt Gradient (Dark Purple) -->
+		<linearGradient id="shirtGrad" x1="8" y1="29" x2="16" y2="42" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#7e22ce"/>
+			<stop offset="1" stop-color="#4c1d95"/>
+		</linearGradient>
+		<!-- Pants Gradient (Dark Blue Jeans) -->
+		<linearGradient id="pantsGrad" x1="8" y1="40" x2="16" y2="54" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#1e3a8a"/>
+			<stop offset="1" stop-color="#172554"/>
 		</linearGradient>
 		<!-- Wave Gradient (White Fade) -->
 		<linearGradient id="waveGrad" x1="30" y1="45" x2="50" y2="45" gradientUnits="userSpaceOnUse">
@@ -17,25 +27,50 @@
 			<stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
 		</linearGradient>
 	</defs>
-	<!-- Thermometer Glass -->
-	<path fill="url(#glassGrad)" stroke="#cccccc" stroke-width="0.5" stroke-miterlimit="10" d="M24 16a5 5 0 00-5 5v16.32a9 9 0 1010 0V21a5 5 0 00-5-5z"/>
-	
-    <!-- Thermometer Fluid (Mercury) -->
-	<circle cx="24" cy="44" r="6" fill="url(#fluidGrad)"/>
-    <!-- Stem: Changed M21 24 to M21 29 (Middle of the stem) -->
-	<path fill="url(#fluidGrad)" d="M21 29h6v15h-6z"/>
-	
-    <!-- Glass Highlights (Reflection) -->
-	<path fill="none" stroke="white" stroke-linecap="round" stroke-width="1" opacity="0.8" d="M22 19v12 M21.5 41a3 3 0 002 4"/>
-	
-    <!-- Radiating Wave 1 (Inner) -->
-	<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
-		<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
-		<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0s"/>
-	</path>
-	<!-- Radiating Wave 2 (Outer) -->
-	<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
-		<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-		<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0.8s"/>
-	</path>
+	<!-- NEUTRAL PERSON (Left Side - Static) -->
+	<g>
+		<!-- Head (Lowered to y=25) -->
+		<circle cx="12" cy="25" r="3.2" fill="#ffffff"/>
+		<!-- Shirt Body (y=29) -->
+		<rect x="8" y="29" width="8" height="11" rx="1" fill="url(#shirtGrad)"/>
+		<!-- Left Arm (Long Sleeve) -->
+		<path d="M8 30 L 6 39" stroke="url(#shirtGrad)" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Left Hand -->
+		<circle cx="6" cy="40" r="1.2" fill="#ffffff"/>
+		<!-- Right Arm (Long Sleeve) -->
+		<path d="M16 30 L 18 39" stroke="url(#shirtGrad)" stroke-width="2.5" stroke-linecap="round"/>
+		<!-- Right Hand -->
+		<circle cx="18" cy="40" r="1.2" fill="#ffffff"/>
+		<!-- Waist Line (y=40) -->
+		<line x1="8" y1="40" x2="16" y2="40" stroke="#2a2a40" stroke-width="1"/>
+		<!-- Pants (y=40) -->
+		<!-- Left Leg -->
+		<rect x="8" y="40" width="3.5" height="11" fill="url(#pantsGrad)"/>
+		<!-- Right Leg -->
+		<rect x="12.5" y="40" width="3.5" height="11" fill="url(#pantsGrad)"/>
+		<!-- Feet/Shoes (Top at y=51, Bottom at y=52) -->
+		<path d="M9 51 L 9 52 L 7 52" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+		<path d="M15 51 L 15 52 L 17 52" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+	</g>
+	<!-- THERMOMETER GROUP (Shifted Right) -->
+	<g transform="translate(14, 0)">
+		<!-- Thermometer Glass -->
+		<path fill="url(#glassGrad)" stroke="#cccccc" stroke-width="0.5" stroke-miterlimit="10" d="M24 16a5 5 0 00-5 5v16.32a9 9 0 1010 0V21a5 5 0 00-5-5z"/>
+		<!-- Thermometer Fluid (Darker Silver) -->
+		<circle cx="24" cy="44" r="6" fill="url(#fluidGrad)"/>
+		<!-- Stem: Middle level (y=29) -->
+		<path fill="url(#fluidGrad)" d="M21 29h6v15h-6z"/>
+		<!-- Glass Highlights -->
+		<path fill="none" stroke="white" stroke-linecap="round" stroke-width="1" opacity="0.8" d="M22 19v12 M21.5 41a3 3 0 002 4"/>
+		<!-- Radiating Wave 1 -->
+		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
+			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0s"/>
+		</path>
+		<!-- Radiating Wave 2 -->
+		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
+			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0.8s"/>
+		</path>
+	</g>
 </svg>

@@ -6,10 +6,15 @@
 			<stop offset="0.5" stop-color="#f3f7fe"/>
 			<stop offset="1" stop-color="#deeafb"/>
 		</linearGradient>
-		<!-- Mercury/Fluid Gradient (Blue/Cyan) -->
+		<!-- Mercury/Coat Gradient (Blue/Cyan) -->
 		<linearGradient id="fluidGrad" x1="21.5" y1="41" x2="26.5" y2="46" gradientUnits="userSpaceOnUse">
 			<stop offset="0" stop-color="#5aa2ff"/>
 			<stop offset="1" stop-color="#1f6fe6"/>
+		</linearGradient>
+		<!-- Scarf Gradient (New: Dark Navy Blue) -->
+		<linearGradient id="scarfGrad" x1="8" y1="31" x2="16" y2="33" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#3b82f6"/>
+			<stop offset="1" stop-color="#1e40af"/>
 		</linearGradient>
 		<!-- Wave Gradient (Fading out) -->
 		<linearGradient id="waveGrad" x1="30" y1="45" x2="50" y2="45" gradientUnits="userSpaceOnUse">
@@ -19,47 +24,43 @@
 	</defs>
 	<!-- SHIVERING PERSON (Left Side) -->
 	<g>
-		<!-- Animation: Increased range (-0.7 to 0.7) and speed (0.10s) for a defined shiver -->
-		<animateTransform attributeName="transform" type="translate" values="-0.7 0; 0.7 0; -0.7 0" dur="0.10s" repeatCount="indefinite"/>
+		<!-- Animation: Rapid left/right shake (Shivering) -->
+		<animateTransform attributeName="transform" type="translate" values="-0.3 0; 0.3 0; -0.3 0" dur="0.12s" repeatCount="indefinite"/>
 		<!-- Pom-Pom -->
-		<circle cx="12" cy="20" r="1.5" fill="url(#fluidGrad)"/>
-		<!-- Beanie Hat (Rounded dome, pulled down) -->
-		<path d="M7 26 Q 12 16 17 26" fill="url(#fluidGrad)"/>
+		<circle cx="12" cy="21" r="1.5" fill="url(#fluidGrad)"/>
+		<!-- Beanie Hat (Dome) -->
+		<path d="M7 26 Q 12 18 17 26" fill="url(#fluidGrad)"/>
+		<!-- Hat Brim -->
 		<rect x="6" y="26" width="12" height="3" rx="1" fill="url(#fluidGrad)"/>
-		<!-- Face (Just a sliver visible) -->
+		<!-- Face -->
 		<path d="M7 29 Q 12 33 17 29" fill="#ffffff"/>
-		<!-- High Scarf/Collar (Hiding the chin) -->
-		<path d="M8 31 Q 12 33 16 31" stroke="url(#fluidGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
-		<!-- Puffy Jacket Body (Hunched Shoulders) -->
-		<path d="M6 36 Q 5 33 9 33 L 15 33 Q 19 33 18 36 L 17 48 Q 17 50 12 50 Q 7 50 7 48 Z" fill="url(#fluidGrad)"/>
-		<!-- Arms (Curved wrap-around hug) -->
-		<!-- Left arm wrapping to right side -->
-		<path d="M7 36 Q 10 44 16 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
-		<!-- Right arm wrapping to left side (on top) -->
-		<path d="M17 36 Q 14 44 8 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
-		<!-- Mittens (Tucked in) -->
-		<circle cx="16" cy="40" r="1.8" fill="url(#fluidGrad)"/>
-		<circle cx="8" cy="40" r="1.8" fill="url(#fluidGrad)"/>
+		<!-- High Scarf/Collar (Now Dark Blue) -->
+		<path d="M8 31 Q 12 33 16 31" stroke="url(#scarfGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+		<!-- Puffy Jacket Body -->
+		<path d="M6 36 Q 5 33 9 33 L 15 33 Q 19 33 18 36 L 17 45 Q 17 46 12 46 Q 7 46 7 45 Z" fill="url(#fluidGrad)"/>
+		<!-- Arms -->
+		<path d="M7 36 Q 10 38 13 36" stroke="url(#scarfGrad)" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+		<path d="M17 36 Q 14 38 11 36" stroke="url(#scarfGrad)" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
 		<!-- Legs with Boots -->
-		<path d="M9 49 L 9 53 L 6 53" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-		<path d="M15 49 L 15 53 L 18 53" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+		<path d="M9 45 L 9 51 L 6 51" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+		<path d="M15 45 L 15 51 L 18 51" stroke="url(#fluidGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
 	</g>
-	<!-- THERMOMETER GROUP (Shifted Right by 14px) -->
+	<!-- THERMOMETER GROUP (Shifted Right) -->
 	<g transform="translate(14, 0)">
 		<!-- Thermometer Glass -->
 		<path fill="url(#glassGrad)" stroke="#e6effc" stroke-width="0.5" stroke-miterlimit="10" d="M24 16a5 5 0 00-5 5v16.32a9 9 0 1010 0V21a5 5 0 00-5-5z"/>
 		<!-- Thermometer Fluid (Mercury) -->
 		<circle cx="24" cy="44" r="6" fill="url(#fluidGrad)"/>
-		<!-- Stem: Low level (y=34) -->
+		<!-- Stem: Low level -->
 		<path fill="url(#fluidGrad)" d="M21 34h6v10h-6z"/>
 		<!-- Glass Highlights -->
 		<path fill="none" stroke="white" stroke-linecap="round" stroke-width="1" opacity="0.6" d="M22 19v12 M21.5 41a3 3 0 002 4"/>
-		<!-- Radiating Wave 1 (Inner) -->
+		<!-- Radiating Wave 1 -->
 		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
 			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
 			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0s"/>
 		</path>
-		<!-- Radiating Wave 2 (Outer) -->
+		<!-- Radiating Wave 2 -->
 		<path fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" d="M34 38 a 8 8 0 0 1 0 12" opacity="0">
 			<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.8s"/>
 			<animate attributeName="d" values="M34 38 a 8 8 0 0 1 0 12; M36 36 a 11 11 0 0 1 0 16" dur="2s" repeatCount="indefinite" begin="0.8s"/>
