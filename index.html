@@ -1236,6 +1236,26 @@
 			}
 			return tempF; // Otherwise, it feels like the actual temp
 		}
+		
+		function calculateHeatIndex(tempF, humidity) {
+			// Heat Index only applies if Temp >= 80F
+			if (tempF < 80) return tempF;
+
+			// Standard NOAA Rothfusz Regression Formula
+			const T = tempF;
+			const RH = humidity;
+			
+			let hi = -42.379 + 2.04901523*T + 10.14333127*RH - .22475541*T*RH - .00683783*T*T - .05481717*RH*RH + .00122874*T*T*RH + .00085282*T*RH*RH - .00000199*T*T*RH*RH;
+
+			// Adjustments for specific conditions
+			if (RH < 13 && T >= 80 && T <= 112) {
+				hi -= ((13 - RH) / 4) * Math.sqrt((17 - Math.abs(T - 95)) / 17);
+			} else if (RH > 85 && T >= 80 && T <= 87) {
+				hi += ((RH - 85) / 10) * ((87 - T) / 5);
+			}
+
+			return hi;
+		}
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -1319,24 +1339,32 @@
 				const windMph = knotsToMph(metar.windSpeedKts ?? 0);
 				const gustMph = metar.windGustKts ? knotsToMph(metar.windGustKts) : null;
 
-				// Temperature / Feels Like from VC
+				// 1. Get Base Data
 				const temp = Math.round(vcData.currentConditions.temp);
-				let feelsLike = Math.round(vcData.currentConditions.feelslike);
+				// Note: We need Relative Humidity for Heat Index
+				const humidity = vcData.currentConditions.humidity; 
 				
-				// 3. OVERRIDE: Calculate accurate Wind Chill if it's cold
-				// If the calculated wind chill is significantly different from VC, trust the math.
+				let calculatedFeelsLike = temp;
+
+				// 2. MASTER LOGIC: Decide which formula to use
 				if (temp <= 50 && windMph > 3) {
-					const calculatedWC = Math.round(calculateWindChill(temp, windMph));
-					// If our calculation is colder than VC's generic one, use ours.
-					if (calculatedWC < feelsLike) {
-						feelsLike = calculatedWC;
-					}
+					// WINTER: Wind Chill
+					calculatedFeelsLike = calculateWindChill(temp, windMph);
+				} else if (temp >= 80) {
+					// SUMMER: Heat Index
+					calculatedFeelsLike = calculateHeatIndex(temp, humidity);
+				} else {
+					// NEUTRAL: It feels like the actual temp
+					calculatedFeelsLike = temp;
 				}
+
+				// 3. Round and Display
+				const feelsLike = Math.round(calculatedFeelsLike);
 
 				document.querySelector(".temp").textContent = `${temp}°`;
 				document.querySelector(".feelslike-temp").textContent = `${feelsLike}°`;
 
-				// --- NEW: Dynamic Feels Like Icon ---
+				// 4. Update the Dynamic Icon (Your existing logic works perfectly with the new value)
 				const flIcon = document.querySelector(".feelslike-icon");
 				let flFilename = "feels-like.svg"; // Default (Silver)
 
