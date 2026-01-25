@@ -1228,6 +1228,14 @@
 									.join(" ");
 			icon.title = iconDescription + " Moon";
 		}
+		
+		function calculateWindChill(tempF, windMph) {
+			// Wind Chill only applies if Temp <= 50F and Wind > 3mph
+			if (tempF <= 50 && windMph > 3) {
+				return 35.74 + (0.6215 * tempF) - (35.75 * Math.pow(windMph, 0.16)) + (0.4275 * tempF * Math.pow(windMph, 0.16));
+			}
+			return tempF; // Otherwise, it feels like the actual temp
+		}
 
 		async function updateWeather() {
 			const apiKey = "MW4Y3ALYDJZ44TNYHD8ZCVE8W";
@@ -1305,10 +1313,25 @@
 
 				document.getElementById("today-high").textContent = `${todayHigh}°`;
 				document.getElementById("today-low").textContent = `${todayLow}°`;
+				
+				// Wind from METAR
+				const windDir = metar.windDirDeg ?? 0;
+				const windMph = knotsToMph(metar.windSpeedKts ?? 0);
+				const gustMph = metar.windGustKts ? knotsToMph(metar.windGustKts) : null;
 
 				// Temperature / Feels Like from VC
 				const temp = Math.round(vcData.currentConditions.temp);
-				const feelsLike = Math.round(vcData.currentConditions.feelslike);
+				let feelsLike = Math.round(vcData.currentConditions.feelslike);
+				
+				// 3. OVERRIDE: Calculate accurate Wind Chill if it's cold
+				// If the calculated wind chill is significantly different from VC, trust the math.
+				if (temp <= 50 && windMph > 3) {
+					const calculatedWC = Math.round(calculateWindChill(temp, windMph));
+					// If our calculation is colder than VC's generic one, use ours.
+					if (calculatedWC < feelsLike) {
+						feelsLike = calculatedWC;
+					}
+				}
 
 				document.querySelector(".temp").textContent = `${temp}°`;
 				document.querySelector(".feelslike-temp").textContent = `${feelsLike}°`;
@@ -1415,11 +1438,6 @@
 				
 				document.querySelector(".meta").innerHTML = `<img src="icons/location-pin.svg" class="location-pin"> ${address}`;
 				document.querySelector(".gps").innerHTML = `<img src="icons/location-gps.svg" class="location-gps"> ${gpsCoordinates}`;
-
-				// Wind from METAR
-				const windDir = metar.windDirDeg ?? 0;
-				const windMph = knotsToMph(metar.windSpeedKts ?? 0);
-				const gustMph = metar.windGustKts ? knotsToMph(metar.windGustKts) : null;
 
 				const windsockIconFilename = getWindsockIconFilename(windMph);
 				const windsockIcon = document.querySelector(".wind-icon");
