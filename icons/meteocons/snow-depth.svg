@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<defs>
+		<!-- Snow Gradient (Slightly darker at bottom for contrast) -->
+		<linearGradient id="snowGrad" x1="18" y1="18" x2="30" y2="46" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#f3f7fe"/>
+			<stop offset="0.5" stop-color="#cbd5e1"/>
+			<stop offset="1" stop-color="#94a3b8"/>
+		</linearGradient>
+		<!-- Stake Gradient -->
+		<pattern id="stripePattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+			<rect x="0" y="0" width="8" height="4" fill="#ef4444"/>
+			<rect x="0" y="4" width="8" height="4" fill="#ffffff"/>
+		</pattern>
+		<!-- Wind/Drift Gradient (More Opaque/Defined) -->
+		<linearGradient id="driftGrad" x1="0" y1="0" x2="1" y2="0">
+			<stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+			<stop offset="0.2" stop-color="#ffffff" stop-opacity="1"/>
+			<stop offset="0.8" stop-color="#ffffff" stop-opacity="1"/>
+			<stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+		</linearGradient>
+	</defs>
+	<!-- MEASURING STAKE (Buried Deep) -->
+	<g transform="translate(28, 10)">
+		<rect x="2" y="0" width="4" height="54" rx="1" fill="url(#stripePattern)" stroke="#b91c1c" stroke-width="0.5"/>
+		<rect x="1" y="0" width="6" height="2" rx="1" fill="#b91c1c"/>
+	</g>
+	<!-- ESTABLISHED SNOWPACK (Foreground) -->
+	<path fill="url(#snowGrad)" stroke="#64748b" stroke-width="0.5" stroke-miterlimit="10" d="M0 64 L 0 30 Q 15 26 32 30 Q 48 34 64 28 L 64 64 Z"/>
+	<!-- SURFACE DRIFT ANIMATION (Blowing Snow) -->
+	<!-- Gust 1 (Top edge) -->
+	<!-- Thicker stroke, curved path, white gradient -->
+	<path fill="none" stroke="url(#driftGrad)" stroke-width="2.5" stroke-linecap="round" d="M5 28 Q 20 26 35 29">
+		<animate attributeName="d" values="M5 28 Q 20 26 35 29; M25 29 Q 40 31 55 27" dur="1.5s" repeatCount="indefinite"/>
+		<animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+	</path>
+	<!-- Gust 2 (Lower/Delayed) -->
+	<path fill="none" stroke="url(#driftGrad)" stroke-width="2" stroke-linecap="round" d="M0 32 Q 15 34 30 32">
+		<animate attributeName="d" values="M0 32 Q 15 34 30 32; M30 32 Q 45 30 60 32" dur="1.8s" repeatCount="indefinite" begin="0.8s"/>
+		<animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" begin="0.8s"/>
+	</path>
+	<!-- Fast Particles (Simulating ice crystals blowing) -->
+	<!-- Particle 1 -->
+	<circle cx="20" cy="27" r="1.2" fill="#ffffff" opacity="0">
+		<animate attributeName="cx" values="10; 60" dur="2s" repeatCount="indefinite"/>
+		<animate attributeName="cy" values="28; 26; 29" dur="2s" repeatCount="indefinite"/>
+		<animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite"/>
+	</circle>
+	<!-- Particle 2 -->
+	<circle cx="10" cy="31" r="1" fill="#ffffff" opacity="0">
+		<animate attributeName="cx" values="0; 50" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+		<animate attributeName="cy" values="31; 33; 31" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+		<animate attributeName="opacity" values="0;1;1;0" dur="1.5s" repeatCount="indefinite" begin="0.3s"/>
+	</circle>
+	<!-- Particle 3 -->
+	<circle cx="30" cy="29" r="0.8" fill="#ffffff" opacity="0">
+		<animate attributeName="cx" values="20; 64" dur="1.8s" repeatCount="indefinite" begin="0.7s"/>
+		<animate attributeName="cy" values="29; 28; 27" dur="1.8s" repeatCount="indefinite" begin="0.7s"/>
+		<animate attributeName="opacity" values="0;1;1;0" dur="1.8s" repeatCount="indefinite" begin="0.7s"/>
+	</circle>
+</svg>

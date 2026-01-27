@@ -453,7 +453,6 @@
 			justify-content: center;
 			margin-top: 16px;
 			font-size: 28px;
-			line-height: 1.1;
 		}
 
 		.highlow > div {
@@ -486,7 +485,6 @@
 		.day-of-month-suffix {
 			font-size: 0.7em;
 			vertical-align: super;
-			line-height: 0;
 		}
 		
 		.barometer-block {
@@ -645,9 +643,9 @@
 			width: 500px; 
 			white-space: nowrap;
 		}
-
+		
 		.moon-times {
-			margin-top: -16px; 
+			margin-top: 3px;
 		}
 
 		/* This ensures the icon and text stay on one line no matter what */
@@ -676,6 +674,51 @@
 			height: 56px;
 			width: 56px;
 			margin-top: -7px;
+		}
+		
+		/* --- UPDATED PRECIP SECTION (Icons + Text) --- */
+		.precip-row {
+			display: grid;
+			/* Columns slightly wider to fit Icon + Text side-by-side */
+			grid-template-columns: 110px 110px 110px; 
+			justify-content: center;
+			gap: 30px;
+		}
+
+		/* Individual Cell: Icon on Left, Text on Right */
+		.precip-col {
+			display: flex;
+			flex-direction: row; /* Horizontal layout */
+			align-items: center; /* Vertically center icon with text block */
+			justify-content: center;
+			gap: 6px; /* Space between Icon and Text */
+		}
+
+		/* New Wrapper to stack the Label and Value vertically */
+		.precip-text {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start; /* Left-align the text */
+		}
+
+		.precip-label {
+			font-size: 14px; /* Slightly smaller to fit "Expected" */
+			text-transform: uppercase;
+			margin-bottom: 2px;
+			opacity: 0.85;
+		}
+
+		.precip-value {
+			font-size: 28px;
+			line-height: 1;
+		}
+
+		.precip-icon-small {
+			height: 42px; /* Matches height of Label + Value combined */
+			width: 42px;
+			margin-top: -4px;
+			margin-right: 4px;
+			object-fit: contain;
 		}
     </style>
 
@@ -1499,6 +1542,70 @@
 				}
 				
 				renderMultiDayConditions(vcData.days, 5);
+				
+				// --- NEW: Calculate Precipitation OR Snow So Far ---
+				const currentHour = new Date().getHours();
+
+				// 1. Calculate Liquid (Rain) totals
+				let rainSoFar = 0;
+				if (vcData.days[0].hours) {
+					rainSoFar = vcData.days[0].hours
+						.slice(0, currentHour + 1)
+						.reduce((sum, h) => sum + (h.precip || 0), 0);
+				}
+				const rainTotal = vcData.days[0].precip || 0;
+
+				// 2. Calculate Snow totals
+				let snowSoFar = 0;
+				if (vcData.days[0].hours) {
+					snowSoFar = vcData.days[0].hours
+						.slice(0, currentHour + 1)
+						.reduce((sum, h) => sum + (h.snow || 0), 0);
+				}
+				const snowTotal = vcData.days[0].snow || 0;
+
+				// 3. Logic: Determine which to display
+				// If there is significant snow forecasted (> 0.1"), show Snow Depth.
+				// Otherwise, show Liquid Equivalent (Rain).
+
+				const soFarEl = document.getElementById('precip-so-far');
+				const totalEl = document.getElementById('precip-total');
+				const iconSoFar = document.getElementById('icon-so-far');
+				const iconTotal = document.getElementById('icon-total');
+				
+				// 1. Get Snow Depth from VC (Current Conditions)
+				// Using currentConditions.snowdepth gives the live reading
+				// Using days[0].snowdepth gives the daily forecast avg/max
+				let snowDepth = vcData.currentConditions.snowdepth || vcData.days[0].snowdepth || 0;
+
+				// 2. Update DOM
+				document.getElementById('snow-depth').textContent = `${snowDepth.toFixed(1)}"`;
+
+				// Decide if we show Snow or Rain data
+				if (snowTotal > 0.1 || temp <= 37) {
+					// SNOW MODE
+					document.getElementById('label-so-far').innerHTML = "Today";
+					document.getElementById('label-total').innerHTML = "Expected";
+					
+					soFarEl.textContent = `${snowSoFar.toFixed(1)}"`;
+					totalEl.textContent = `${snowTotal.toFixed(1)}"`;
+					
+					// Update Icons to Snow versions
+					iconSoFar.src = "icons/meteocons/snow-so-far.svg";
+					iconTotal.src = "icons/meteocons/snow-total.svg";
+					
+				} else {
+					// RAIN MODE
+					document.getElementById('label-so-far').innerHTML = "Today";
+					document.getElementById('label-total').innerHTML = "Expected";
+					
+					soFarEl.textContent = `${rainSoFar.toFixed(2)}"`;
+					totalEl.textContent = `${rainTotal.toFixed(2)}"`;
+					
+					// Update Icons to Rain versions
+					iconSoFar.src = "icons/meteocons/rain-so-far.svg";
+					iconTotal.src = "icons/meteocons/rain-total.svg";
+				}
 			} catch (err) {
 				console.log(err);
 				document.querySelector(".desc").textContent = "Weather unavailable";
@@ -1661,6 +1768,35 @@
 				<div>
 					<img src="icons/meteocons/thermometer-low.svg" class="hl-icon cold" title="Today's Low Temp">
 					<span id="today-low">--°</span>
+				</div>
+			</div>
+			
+			<div class="precip-row outline">
+				<!-- Column 1: So Far -->
+				<div class="precip-col">
+					<img id="icon-so-far" class="precip-icon-small" src="icons/meteocons/rain-so-far.svg">
+					<div class="precip-text">
+						<span class="precip-label" id="label-so-far">Today</span>
+						<span id="precip-so-far" class="precip-value">--</span>
+					</div>
+				</div>
+
+				<!-- Column 2: Expected -->
+				<div class="precip-col">
+					<img id="icon-total" class="precip-icon-small" src="icons/meteocons/rain-total.svg">
+					<div class="precip-text">
+						<span class="precip-label" id="label-total">Expected</span>
+						<span id="precip-total" class="precip-value">--</span>
+					</div>
+				</div>
+
+				<!-- Column 3: Depth -->
+				<div class="precip-col">
+					<img id="icon-depth" class="precip-icon-small" src="icons/meteocons/snow-depth.svg">
+					<div class="precip-text">
+						<span class="precip-label">Depth</span>
+						<span id="snow-depth" class="precip-value">--</span>
+					</div>
 				</div>
 			</div>
 		</div>
