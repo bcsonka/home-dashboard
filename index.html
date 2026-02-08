@@ -466,7 +466,8 @@
 			height: 64px;
 			width: 64px;
 			object-fit: contain;
-			margin-right: -12px; 
+			margin-right: -12px;
+			margin-top: -3px;
 		}
 		
 		.location-pin {
@@ -638,7 +639,7 @@
 		.moon-times {
 			display: grid;
 			grid-template-columns: 80px 210px 210px;
-			gap: 20px; 
+			gap: 12px; 
 			font-size: 28px;
 			width: 500px; 
 			white-space: nowrap;
@@ -680,9 +681,10 @@
 		.precip-row {
 			display: grid;
 			/* Columns slightly wider to fit Icon + Text side-by-side */
-			grid-template-columns: 110px 110px 110px; 
+			grid-template-columns: 100px 100px 100px; 
 			justify-content: center;
-			gap: 30px;
+			gap: 25px;
+			margin-top: 3px;
 		}
 
 		/* Individual Cell: Icon on Left, Text on Right */
@@ -699,6 +701,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start; /* Left-align the text */
+			margin-top: -3px;
 		}
 
 		.precip-label {
@@ -714,10 +717,9 @@
 		}
 
 		.precip-icon-small {
-			height: 42px; /* Matches height of Label + Value combined */
-			width: 42px;
-			margin-top: -4px;
-			margin-right: 4px;
+			height: 36px; /* Matches height of Label + Value combined */
+			width: 36px;
+			margin: 4px;
 			object-fit: contain;
 		}
     </style>
@@ -758,6 +760,9 @@
 
 		function mapMetarToIcon(condition, isDaytime) {
 			const c = condition.toLowerCase();
+			
+			// --- Snow ---
+			if (c.includes("snow")) return "snow";
 
 			// --- Thunderstorms ---
 			if (c.includes("thundersnow")) return "thundersnow";
@@ -772,9 +777,6 @@
 
 			// --- Normal Rain ---
 			if (c.includes("rain") || c.includes("drizzle") || c.includes("freezing")) return "rain";
-
-			// --- Snow ---
-			if (c.includes("snow")) return "snow";
 
 			// --- Fog ---
 			if (c.includes("fog") || c.includes("mist") || c.includes("haze")) return "fog";
@@ -988,7 +990,7 @@
 			if (codes.includes("-SN")) return "Light Snow";
 			if (/\bSHSN\b/.test(codes)) return "Snow Showers";
 			if (/\bBLSN\b/.test(codes)) return "Blowing Snow";
-			if (/\bSG\b/.test(codes)) return "Flurries";
+			if (/\bSG\b/.test(codes)) return "Granular Snow";
 			if (/\bIC\b/.test(codes)) return "Ice Crystals";
 			if (/\bSN\b/.test(codes)) return "Snow"; // default (moderate)
 
@@ -1410,17 +1412,21 @@
 				// 4. Update the Dynamic Icon (Your existing logic works perfectly with the new value)
 				const flIcon = document.querySelector(".feelslike-icon");
 				let flFilename = "feels-like.svg"; // Default (Silver)
+				let flTitle = "Feels Like";
 
 				if (feelsLike < temp) {
 					// It feels colder than it actually is (Wind Chill) -> BLUE
 					flFilename = "feels-like-cooler.svg";
+					flTitle = "Wind Chill";
 				} else if (feelsLike > temp) {
 					// It feels warmer than it actually is (Heat Index) -> RED
 					flFilename = "feels-like-warmer.svg";
+					flTitle = "Head Index";
 				}
 				// If they are equal, it stays Silver
 
 				flIcon.src = `icons/meteocons/${flFilename}`;
+				flIcon.title = flTitle;
 
 				const isDaytime = vcData.currentConditions.icon?.includes("night") === false;
 
@@ -1585,7 +1591,7 @@
 				if (snowTotal > 0.1 || temp <= 37) {
 					// SNOW MODE
 					document.getElementById('label-so-far').innerHTML = "Today";
-					document.getElementById('label-total').innerHTML = "Expected";
+					document.getElementById('label-total').innerHTML = "Due";
 					
 					soFarEl.textContent = `${snowSoFar.toFixed(1)}"`;
 					totalEl.textContent = `${snowTotal.toFixed(1)}"`;
@@ -1597,7 +1603,7 @@
 				} else {
 					// RAIN MODE
 					document.getElementById('label-so-far').innerHTML = "Today";
-					document.getElementById('label-total').innerHTML = "Expected";
+					document.getElementById('label-total').innerHTML = "Due";
 					
 					soFarEl.textContent = `${rainSoFar.toFixed(2)}"`;
 					totalEl.textContent = `${rainTotal.toFixed(2)}"`;
@@ -1752,7 +1758,7 @@
 					<div class="temp outline"></div>
 					
 					<div class="feelslike-info outline">
-						<img class="feelslike-icon" title="Feels Like Temp">
+						<img class="feelslike-icon">
 						<!-- Temp is now to the right of the icon -->
 						<div class="feelslike-temp"></div>
 					</div>
