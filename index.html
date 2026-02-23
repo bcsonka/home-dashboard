@@ -9,6 +9,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
 
 	<style>
         body {
@@ -743,6 +744,17 @@
 			"thunderstorm-rain": "thunderstorms-rain.svg"
 		};
 		
+		const MOON_PHASES = [
+			{ name: "new",             isInPhase: angle => angle >= 348.75 || angle < 11.25 },
+			{ name: "waxing-crescent", isInPhase: angle => angle >= 11.25 && angle < 78.75 },
+			{ name: "first-quarter",   isInPhase: angle => angle >= 78.75 && angle < 101.25 },
+			{ name: "waxing-gibbous",  isInPhase: angle => angle >= 101.25 && angle < 168.75 },
+			{ name: "full",            isInPhase: angle => angle >= 168.75 && angle < 191.25 },
+			{ name: "waning-gibbous",  isInPhase: angle => angle >= 191.25 && angle < 258.75 },
+			{ name: "last-quarter",    isInPhase: angle => angle >= 258.75 && angle < 281.25 },
+			{ name: "waning-crescent", isInPhase: angle => angle >= 281.25 && angle < 348.75 }
+		];
+		
 		// --- PIXEL DRIFT (burn‑in protection) ---
 		const driftPositions = [
 		  { x: 0,  y: 0 },
@@ -1195,17 +1207,40 @@
 			});
 		}
 		
-		function updateSunMoonTimes(latitude, longitude) {
-			const now = new Date();
-			const localeTimeOptions = {hour: 'numeric', minute:'2-digit'};
+		function getStartOfToday() {
+			var startOfToday = new Date();
+			startOfToday.setHours(0, 0, 0, 0);
+			return startOfToday;
+		}
+		
+		function getSunrise(observer) {
+			return Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, 1, getStartOfToday(), 1);
+		}
+		
+		function getSunset(observer) {
+			return Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, getStartOfToday(), 1);
+		}
+		
+		function getMoonrise(observer) {
+			return Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, 1, getStartOfToday(), 1);
+		}
+		
+		function getMoonset(observer) {
+			return Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, -1, getStartOfToday(), 1);
+		}
+		
+		function updateSunMoonTimes(latitude, longitude, elevation) {
+			const observer = new Astronomy.Observer(latitude, longitude, elevation);
+			const sunrise = getSunrise(observer);
+			const sunset = getSunset(observer);
+			const moonrise = getMoonrise(observer);
+			const moonset = getMoonset(observer);
 			
-			const sunTimes = SunCalc.getTimes(now, latitude, longitude);
-			document.getElementById('sunrise').innerText = sunTimes.sunrise.toLocaleTimeString([], localeTimeOptions);
-			document.getElementById('sunset').innerText = sunTimes.sunset.toLocaleTimeString([], localeTimeOptions);
-
-			const moonTimes = SunCalc.getMoonTimes(now, latitude, longitude);			
-			document.getElementById('moonrise').innerText = moonTimes.rise ? moonTimes.rise.toLocaleTimeString([], localeTimeOptions) : "N/A";
-			document.getElementById('moonset').innerText = moonTimes.set ? moonTimes.set.toLocaleTimeString([], localeTimeOptions) : "N/A";
+			const localeTimeOptions = {hour: 'numeric', minute:'2-digit'};
+			document.getElementById('sunrise').innerText = sunrise ? sunrise.date.toLocaleTimeString([], localeTimeOptions) : "N/A";
+			document.getElementById('sunset').innerText = sunset ? sunset.date.toLocaleTimeString([], localeTimeOptions) : "N/A";
+			document.getElementById('moonrise').innerText = moonrise ? moonrise.date.toLocaleTimeString([], localeTimeOptions) : "N/A";
+			document.getElementById('moonset').innerText = moonset ? moonset.date.toLocaleTimeString([], localeTimeOptions) : "N/A";
 		}
 		
 		async function getUVIndexValue(latitude, longitude, vcUVIndex) {
@@ -1254,16 +1289,10 @@
 			}
 		}
 
-		function updateMoonPhaseIcon(moonPhaseValue) {
-			let iconName = "";
-			if (moonPhaseValue === 0 || moonPhaseValue === 1) iconName = "new";
-			else if (moonPhaseValue < 0.25) iconName = "waxing-crescent";
-			else if (moonPhaseValue === 0.25) iconName = "first-quarter";
-			else if (moonPhaseValue < 0.5) iconName = "waxing-gibbous";
-			else if (moonPhaseValue === 0.5) iconName = "full";
-			else if (moonPhaseValue < 0.75) iconName = "waning-gibbous";
-			else if (moonPhaseValue === 0.75) iconName = "last-quarter";
-			else iconName = "waning-crescent";
+		function updateMoonPhaseIcon(angle) {
+			const normalizedAngle = angle % 360;
+			const phase = MOON_PHASES.find(p => p.isInPhase(normalizedAngle)) || { name: "new" };
+			const iconName = phase.name;
 			
 			let icon = document.querySelector('.moon-phase-icon');
 			icon.src = `icons/meteocons/moon-${iconName}.svg`;
@@ -1327,8 +1356,11 @@
 
 				const vcData = await vcResponse.json();
 				console.log("vcData.currentConditions", vcData.currentConditions);
-				const latDMS = toDMS(vcData.latitude, true);
-				const lonDMS = toDMS(vcData.longitude, false);
+				const latitude = 42.4058459560502;
+				const longitude = -83.67106870545311;
+				const elevation = 285;
+				const latDMS = toDMS(latitude, true);
+				const lonDMS = toDMS(longitude, false);
 				const gpsCoordinates = `${latDMS}, ${lonDMS}`;
 
 				//const lines = metarText.trim().split("\n");
@@ -1367,10 +1399,11 @@
 					pressureTrendIcon.style.display = "none";
 				}
 				
-				updateSunMoonTimes(vcData.latitude, vcData.longitude);
-				const uvIndex = await getUVIndexValue(vcData.latitude, vcData.longitude, vcData.currentConditions.uvindex);
-				updateUVIndexIcon(uvIndex, vcData.latitude, vcData.longitude, vcData.currentConditions.cloudcover);
-				updateMoonPhaseIcon(vcData.currentConditions.moonphase);
+				updateSunMoonTimes(latitude, longitude, elevation);
+				const uvIndex = await getUVIndexValue(latitude, longitude, vcData.currentConditions.uvindex);
+				updateUVIndexIcon(uvIndex, latitude, longitude, vcData.currentConditions.cloudcover);
+				//updateMoonPhaseIcon(vcData.currentConditions.moonphase);
+				updateMoonPhaseIcon(Astronomy.MoonPhase(new Date()));
 				
 				// High / Low from VC
 				const todayHigh = Math.round(vcData.days[0].tempmax);
