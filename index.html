@@ -1097,15 +1097,34 @@
 		}
 		
 		function getPressureTrend(metarRaw) {
-			// Look for pressure tendency codes in RMK section
-			if (!metarRaw.includes("RMK")) return "steady";
+			// 1. Basic safety check
+			if (!metarRaw || !metarRaw.includes("RMK")) return "steady";
 
 			const rmk = metarRaw.split("RMK")[1];
 
+			// 2. Check for explicit text codes (US Stations often use these)
 			if (rmk.includes("PRESRR")) return "rising-rapid";
 			if (rmk.includes("PRESR"))  return "rising";
 			if (rmk.includes("PRESFR")) return "falling-rapid";
 			if (rmk.includes("PRESF"))  return "falling";
+
+			// 3. Check for the "5-Group" (Standard World Meteorological Organization format)
+			// Format: 5appp (5 = group ID, a = characteristic, ppp = amount of change)
+			// Regex matches "5" followed by a digit 0-8, followed by 3 digits
+			const trendMatch = rmk.match(/\b5([0-8])\d{3}\b/);
+
+			if (trendMatch) {
+				const code = parseInt(trendMatch[1], 10);
+
+				// Codes 0, 1, 2, 3 indicate the pressure is higher now than 3 hours ago
+				if (code <= 3) return "rising";
+
+				// Codes 5, 6, 7, 8 indicate the pressure is lower now than 3 hours ago
+				if (code >= 5) return "falling";
+
+				// Code 4 indicates the pressure is exactly the same (Steady)
+				return "steady";
+			}
 
 			return "steady";
 		}
@@ -1386,17 +1405,16 @@
 				
 				const pressureTrend = getPressureTrend(metar.raw);
 				const pressureTrendIcon = document.querySelector(".barometer-trend");
-
-				if (pressureTrend === "rising" || pressureTrend === "rising-rapid") {
-					pressureTrendIcon.src = "icons/meteocons/pressure-high.svg";
-					pressureTrendIcon.style.display = "block";
-					pressureValueElement.classList.add("trend");
-				} else if (pressureTrend === "falling" || pressureTrend === "falling-rapid") {
-					pressureTrendIcon.src = "icons/meteocons/pressure-low.svg";
-					pressureTrendIcon.style.display = "block";
-					pressureValueElement.classList.add("trend");
-				} else {
+				
+				if(pressureTrend === "steady") {
 					pressureTrendIcon.style.display = "none";
+				} else {
+					pressureTrendIcon.src = `icons/meteocons/pressure-${pressureTrend}.svg`;
+					pressureTrendIcon.style.display = "block";
+					pressureValueElement.classList.add("trend");
+					
+					let pressureTrendIconDescription = pressureTrend.replaceAll("-", "");
+					pressureTrendIcon.title = "Pressure " + pressureTrendIconDescription;
 				}
 				
 				updateSunMoonTimes(latitude, longitude, elevation);
