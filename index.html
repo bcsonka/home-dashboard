@@ -1440,26 +1440,31 @@
 				const feelsLike = Math.round(calculatedFeelsLike);
 
 				document.querySelector(".temp").textContent = `${temp}°`;
-				document.querySelector(".feelslike-temp").textContent = `${feelsLike}°`;
+				
+				if(temp === feelsLike) {
+					document.querySelector(".feelslike-info").style.display = "none";
+				} else {
+					document.querySelector(".feelslike-temp").textContent = `${feelsLike}°`;
 
-				// 4. Update the Dynamic Icon (Your existing logic works perfectly with the new value)
-				const flIcon = document.querySelector(".feelslike-icon");
-				let flFilename = "feels-like.svg"; // Default (Silver)
-				let flTitle = "Feels Like";
+					// 4. Update the Dynamic Icon (Your existing logic works perfectly with the new value)
+					const flIcon = document.querySelector(".feelslike-icon");
+					let flFilename = "feels-like.svg"; // Default (Silver)
+					let flTitle = "Feels Like";
 
-				if (feelsLike < temp) {
-					// It feels colder than it actually is (Wind Chill) -> BLUE
-					flFilename = "feels-like-cooler.svg";
-					flTitle = "Wind Chill";
-				} else if (feelsLike > temp) {
-					// It feels warmer than it actually is (Heat Index) -> RED
-					flFilename = "feels-like-warmer.svg";
-					flTitle = "Head Index";
+					if (feelsLike < temp) {
+						// It feels colder than it actually is (Wind Chill) -> BLUE
+						flFilename = "feels-like-cooler.svg";
+						flTitle = "Wind Chill";
+					} else if (feelsLike > temp) {
+						// It feels warmer than it actually is (Heat Index) -> RED
+						flFilename = "feels-like-warmer.svg";
+						flTitle = "Head Index";
+					}
+					// If they are equal, it stays Silver
+
+					flIcon.src = `icons/meteocons/${flFilename}`;
+					flIcon.title = flTitle;
 				}
-				// If they are equal, it stays Silver
-
-				flIcon.src = `icons/meteocons/${flFilename}`;
-				flIcon.title = flTitle;
 
 				const isDaytime = vcData.currentConditions.icon?.includes("night") === false;
 
