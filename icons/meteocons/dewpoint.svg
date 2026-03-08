@@ -1,53 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 	<defs>
-		<linearGradient id="a" x1="14.8" x2="124.2" y1="42.3" y2="231.7" gradientUnits="userSpaceOnUse">
-			<stop offset="0" stop-color="#3392d6"/>
-			<stop offset=".5" stop-color="#3392d6"/>
-			<stop offset="1" stop-color="#2477b2"/>
+		<!-- Water Gradient -->
+		<linearGradient id="waterGrad" x1="0" y1="0" x2="1" y2="0">
+			<stop offset="0" stop-color="#60a5fa" stop-opacity="0.9"/>
+			<stop offset="0.5" stop-color="#3b82f6" stop-opacity="0.9"/>
+			<stop offset="1" stop-color="#2563eb" stop-opacity="0.9"/>
 		</linearGradient>
-		<symbol id="b" viewBox="0 0 164 245.6">
-			<path fill="url(#a)" stroke="#2885c7" stroke-miterlimit="10" stroke-width="4" d="M82 3.6c-48.7 72-80 117-80 160.7s35.8 79.3 80 79.3 80-35.5 80-79.3S130.7 75.5 82 3.6Z">
-				<animateTransform additive="sum" attributeName="transform" calcMode="spline" dur="6s" keySplines=".42, 0, .58, 1; .42, 0, .58, 1" repeatCount="indefinite" type="scale" values="1 1; 1 .9; 1 1"/>
-			</path>
-		</symbol>
+
+        <!-- Leaf Gradient -->
+        <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4ade80"/>
+            <stop offset="1" stop-color="#16a34a"/>
+        </linearGradient>
 	</defs>
-	<use xlink:href="#b" width="164" height="245.6" transform="translate(173.9 133.01)"/>
-	<!-- Centered thermometer with masked stem so bulb stays fully red -->
-	<g transform="translate(256 265) scale(1.15)">
 
-		<!-- Mask to hide stem inside the bulb -->
-		<mask id="thermoMask">
-			<rect x="-50" y="-120" width="200" height="260" fill="white"/>
-			<circle cx="0" cy="40" r="18" fill="black"/>
-		</mask>
+    <!-- CENTER GROUP: Scaled 0.7 -->
+    <g transform="translate(9.6, 9.6) scale(0.7)">
+    
+        <!-- LEAF OBJECT -->
+        <g transform-origin="10 30">
+            <!-- Leaf Animation: Sway -->
+            <animateTransform attributeName="transform" type="rotate" values="0; 3; 0" dur="4s" repeatCount="indefinite" />
+            
+            <!-- 1. Base Leaf Body -->
+            <path d="M4 28 Q 32 10 60 38 Q 32 60 4 28 Z" fill="url(#leafGrad)" />
+            
+            <!-- 2. Leaf Fold Shadow (Bottom Half) -->
+            <!-- Adds depth by darkening the lower side of the vein -->
+            <path d="M4 28 Q 30 25 50 35 Q 32 60 4 28 Z" fill="#000000" opacity="0.15" />
 
-		<!-- Red bulb -->
-		<circle cx="0" cy="40" r="18" fill="#ff3b3b"/>
+            <!-- 3. Veins -->
+            <g stroke="#14532d" stroke-width="0.8" fill="none" opacity="0.3">
+                <!-- Center Vein -->
+                <path d="M4 28 Q 30 25 50 35" stroke-width="1.5" />
+                
+                <!-- Top Branching Veins -->
+                <path d="M20 26 Q 25 20 30 16" />
+                <path d="M35 29 Q 40 22 45 18" />
+                
+                <!-- Bottom Branching Veins -->
+                <path d="M18 27 Q 22 35 26 42" />
+                <path d="M32 30 Q 36 38 40 45" />
+            </g>
 
-		<!-- Taller white stem (extended upward only) -->
-		<!-- White stem (shortened to avoid bump) -->
-		<rect x="-6" y="-70" width="12" height="104" rx="6" fill="#fff" mask="url(#thermoMask)"/>
+            <!-- 4. Top Edge Highlight (Catches light) -->
+            <path d="M4 28 Q 32 10 60 38" fill="none" stroke="#bbf7d0" stroke-width="1" opacity="0.6" />
+            
+            <!-- Leaf Stem -->
+            <path d="M4 28 L -2 30" stroke="#16a34a" stroke-width="2" stroke-linecap="round" />
 
-		<!-- Taller red mercury column (extended upward to match) -->
-		<!-- Red mercury column (shortened to avoid bump) -->
-		<rect x="-3" y="-10" width="6" height="64" rx="3" fill="#ff3b3b"/>
+            <!-- MAIN DEW DROP (Smaller) -->
+            <path fill="url(#waterGrad)" d="M49 29 Q 42 39 43 44 A 6 6 0 0 0 53 41 Q 54 32 49 29 Z">
+                <animateTransform attributeName="transform" type="scale" values="1 1; 1.05 0.95; 1 1" dur="4s" repeatCount="indefinite" additive="sum" transform-origin="48 38"/>
+            </path>
+            
+            <!-- Drop Highlight -->
+            <path d="M46 34 Q 44 37 45 40" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5">
+                 <animateTransform attributeName="transform" type="scale" values="1 1; 1.05 0.95; 1 1" dur="4s" repeatCount="indefinite" additive="sum" transform-origin="48 38"/>
+            </path>
 
-		<!-- Tick marks (compressed downward) -->
-		<!-- Tick marks (lightly compressed) -->
-		<g stroke="#fff" stroke-width="4" stroke-linecap="round">
-
-			<!-- Major ticks -->
-			<line x1="10" y1="15"  x2="20" y2="15"/>
-			<line x1="10" y1="-12" x2="20" y2="-12"/>
-			<line x1="10" y1="-39" x2="20" y2="-39"/>
-			<line x1="10" y1="-65" x2="20" y2="-65"/>  <!-- top of stem -->
-
-			<!-- Minor ticks -->
-			<line x1="10" y1="2"    x2="16" y2="2"/>
-			<line x1="10" y1="-26"  x2="16" y2="-26"/>
-			<line x1="10" y1="-52"  x2="16" y2="-52"/>
-
-		</g>
-
-	</g>
+            <!-- ROLLING DROPLET -->
+            <circle r="3" fill="url(#waterGrad)" opacity="0.9">
+                <animateMotion path="M15 26 Q 25 24 38 34" dur="3s" repeatCount="indefinite" rotate="auto" />
+                <animate attributeName="opacity" values="0; 1; 1; 0" keyTimes="0; 0.2; 0.8; 1" dur="3s" repeatCount="indefinite" />
+                <animateTransform attributeName="transform" type="scale" values="0.5; 1" dur="3s" repeatCount="indefinite" additive="sum" />
+            </circle>
+        </g>
+    </g>
 </svg>
