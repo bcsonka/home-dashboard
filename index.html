@@ -700,6 +700,10 @@
 			gap: 6px; /* Space between Icon and Text */
 		}
 
+		.snow-depth-col {
+			display: none;
+		}
+
 		/* New Wrapper to stack the Label and Value vertically */
 		.precip-text {
 			display: flex;
@@ -1648,7 +1652,7 @@
 
 				if(snowDepth > 0) {
 					precipitationRow.classList.add("snow-depth-grid");
-					snowDepthColumn.style.removeProperty("display");
+					snowDepthColumn.style.display = "flex";
 					// 2. Update DOM
 					document.getElementById('snow-depth').textContent = `${snowDepth.toFixed(1)}"`;
 				} else {
