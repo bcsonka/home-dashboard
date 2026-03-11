@@ -681,11 +681,14 @@
 		/* --- UPDATED PRECIP SECTION (Icons + Text) --- */
 		.precip-row {
 			display: grid;
-			/* Columns slightly wider to fit Icon + Text side-by-side */
-			grid-template-columns: 100px 100px 100px; 
+			grid-template-columns: 100px 100px;
 			justify-content: center;
 			gap: 25px;
 			margin-top: 3px;
+		}
+		
+		.snow-depth-grid {
+			grid-template-columns: 100px 100px 100px;
 		}
 
 		/* Individual Cell: Icon on Left, Text on Right */
@@ -1635,14 +1638,24 @@
 				const iconSoFar = document.getElementById('icon-so-far');
 				const iconTotal = document.getElementById('icon-total');
 				
+				const precipitationRow = document.querySelector('.precip-row');
+				const snowDepthColumn = document.querySelector('.snow-depth-col');
+				
 				// 1. Get Snow Depth from VC (Current Conditions)
 				// Using currentConditions.snowdepth gives the live reading
 				// Using days[0].snowdepth gives the daily forecast avg/max
 				let snowDepth = vcData.currentConditions.snowdepth || vcData.days[0].snowdepth || 0;
 
-				// 2. Update DOM
-				document.getElementById('snow-depth').textContent = `${snowDepth.toFixed(1)}"`;
-
+				if(snowDepth > 0) {
+					precipitationRow.classList.add("snow-depth-grid");
+					snowDepthColumn.style.display = "block";
+					// 2. Update DOM
+					document.getElementById('snow-depth').textContent = `${snowDepth.toFixed(1)}"`;
+				} else {
+					precipitationRow.classList.remove("snow-depth-grid");
+					snowDepthColumn.style.display = "none";
+				}
+				
 				// Decide if we show Snow or Rain data
 				if (snowTotal > 0.1 || temp <= 37) {
 					// SNOW MODE
@@ -1853,7 +1866,7 @@
 				</div>
 
 				<!-- Column 3: Depth -->
-				<div class="precip-col">
+				<div class="precip-col snow-depth-col">
 					<img id="icon-depth" class="precip-icon-small" src="icons/meteocons/snow-depth.svg">
 					<div class="precip-text">
 						<span class="precip-label">Depth</span>
