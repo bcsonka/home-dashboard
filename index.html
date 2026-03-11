@@ -1648,7 +1648,7 @@
 
 				if(snowDepth > 0) {
 					precipitationRow.classList.add("snow-depth-grid");
-					snowDepthColumn.style.display = "block";
+					snowDepthColumn.style.removeProperty("display");
 					// 2. Update DOM
 					document.getElementById('snow-depth').textContent = `${snowDepth.toFixed(1)}"`;
 				} else {
