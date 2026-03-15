@@ -1137,9 +1137,9 @@
 		}
 		
 		function getWindSpeedDesc(windMph) {
-			if(windMph <= 3) return "calm";
-			else if(windMph <= 7) return "low";
-			else if(windMph <= 15) return "moderate";
+			if(windMph < 5) return "calm";
+			else if(windMph < 9) return "low";
+			else if(windMph < 18) return "moderate";
 			else return "high";
 		}
 		
