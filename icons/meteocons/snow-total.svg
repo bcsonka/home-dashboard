@@ -1,88 +1,130 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-	<defs>
-		<!-- Snow Gradient -->
-		<linearGradient id="snowGrad" x1="18" y1="18" x2="30" y2="46" gradientUnits="userSpaceOnUse">
-			<stop offset="0" stop-color="#f3f7fe"/>
-			<stop offset="0.5" stop-color="#f3f7fe"/>
-			<stop offset="1" stop-color="#deeafb"/>
-		</linearGradient>
-		<!-- Stake Gradient (Red/White Stripes) -->
-		<pattern id="stripePattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
-			<rect x="0" y="0" width="8" height="4" fill="#ef4444"/>
-			<!-- Red -->
-			<rect x="0" y="4" width="8" height="4" fill="#ffffff"/>
-			<!-- White -->
-		</pattern>
-		<!-- Snowflake Gradient -->
-		<linearGradient id="flakeGrad" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
-			<stop offset="0" stop-color="#86c3db"/>
-			<stop offset="1" stop-color="#5eafcf"/>
-		</linearGradient>
-		<!-- BOLD CHEVRON SNOWFLAKE DEFINITION -->
-		<g id="crystalFlake">
-			<g stroke="url(#flakeGrad)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-				<defs>
-					<path id="boldArm" d="M 0 0 L 0 -5 M -2 -3.2 L 0 -1.8 L 2 -3.2"/>
-				</defs>
-				<use href="#boldArm"/>
-				<use href="#boldArm" transform="rotate(60)"/>
-				<use href="#boldArm" transform="rotate(120)"/>
-				<use href="#boldArm" transform="rotate(180)"/>
-				<use href="#boldArm" transform="rotate(240)"/>
-				<use href="#boldArm" transform="rotate(300)"/>
-			</g>
-		</g>
-	</defs>
-	<!-- MEASURING STAKE (Background) -->
-	<g transform="translate(28, 10)">
-		<!-- Stake Body -->
-		<rect x="2" y="0" width="4" height="54" rx="1" fill="url(#stripePattern)" stroke="#b91c1c" stroke-width="0.5"/>
-		<!-- Cap at top -->
-		<rect x="1" y="0" width="6" height="2" rx="1" fill="#b91c1c"/>
-	</g>
-	<!-- FALLING SNOWFLAKES (5 Small Flakes) -->
-	<!-- Flake 1 (Left Edge) -->
-	<g>
-		<animateTransform attributeName="transform" type="translate" values="10 -5; 10 45" dur="3.5s" repeatCount="indefinite" additive="sum"/>
-		<animateTransform attributeName="transform" type="rotate" values="0; 360" dur="7s" repeatCount="indefinite" additive="sum"/>
-		<animate attributeName="opacity" values="0;1;1;0" dur="3.5s" repeatCount="indefinite"/>
-		<use href="#crystalFlake" transform="scale(0.5)"/>
-	</g>
-	<!-- Flake 2 (Near Stake) -->
-	<g>
-		<animateTransform attributeName="transform" type="translate" values="24 -5; 24 40" dur="4s" repeatCount="indefinite" begin="1.2s" additive="sum"/>
-		<animateTransform attributeName="transform" type="rotate" values="0; -360" dur="8s" repeatCount="indefinite" begin="1.2s" additive="sum"/>
-		<animate attributeName="opacity" values="0;1;1;0" dur="4s" repeatCount="indefinite" begin="1.2s"/>
-		<use href="#crystalFlake" transform="scale(0.4)"/>
-	</g>
-	<!-- Flake 3 (Right Side) -->
-	<g>
-		<animateTransform attributeName="transform" type="translate" values="45 -5; 45 45" dur="3s" repeatCount="indefinite" begin="0.5s" additive="sum"/>
-		<animateTransform attributeName="transform" type="rotate" values="45; 405" dur="6s" repeatCount="indefinite" begin="0.5s" additive="sum"/>
-		<animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" begin="0.5s"/>
-		<use href="#crystalFlake" transform="scale(0.6)"/>
-	</g>
-	<!-- Flake 4 (Far Right) -->
-	<g>
-		<animateTransform attributeName="transform" type="translate" values="58 -5; 58 40" dur="4.5s" repeatCount="indefinite" begin="2s" additive="sum"/>
-		<animateTransform attributeName="transform" type="rotate" values="0; -360" dur="9s" repeatCount="indefinite" begin="2s" additive="sum"/>
-		<animate attributeName="opacity" values="0;1;1;0" dur="4.5s" repeatCount="indefinite" begin="2s"/>
-		<use href="#crystalFlake" transform="scale(0.45)"/>
-	</g>
-	<!-- Flake 5 (Center) -->
-	<g>
-		<animateTransform attributeName="transform" type="translate" values="36 -5; 36 35" dur="5s" repeatCount="indefinite" begin="0.2s" additive="sum"/>
-		<animateTransform attributeName="transform" type="rotate" values="0; 360" dur="10s" repeatCount="indefinite" begin="0.2s" additive="sum"/>
-		<animate attributeName="opacity" values="0;1;1;0" dur="5s" repeatCount="indefinite" begin="0.2s"/>
-		<use href="#crystalFlake" transform="scale(0.35)"/>
-	</g>
-	<!-- ACCUMULATING SNOW PILE -->
-	<!-- Adjusted translate from -21 to -13 (Lowered by one stripe) -->
-	<path fill="url(#snowGrad)" stroke="#e6effc" stroke-width="0.5" stroke-miterlimit="10" d="M6 54 Q 32 48 58 54 L 58 120 L 6 120 Z">
-		<animateTransform attributeName="transform" type="translate" values="0 20; 0 -13; 0 -13; 0 20" keyTimes="0; 0.4; 0.8; 1" dur="6s" repeatCount="indefinite"/>
-	</path>
-	<!-- Masking edge -->
-	<path d="M6 54 Q 32 48 58 54" fill="none" stroke="#e6effc" stroke-width="1">
-		<animateTransform attributeName="transform" type="translate" values="0 20; 0 -13; 0 -13; 0 20" keyTimes="0; 0.4; 0.8; 1" dur="6s" repeatCount="indefinite"/>
-	</path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+    <defs>
+        <!-- Soft Drop Shadow for Depth (Meteocons aesthetic) -->
+        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#041246" flood-opacity="0.12"/>
+        </filter>
+        
+        <!-- Smooth Gradients -->
+        <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#e2e8f0"/>
+        </linearGradient>
+        
+        <linearGradient id="snowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#7dd3fc"/>
+            <stop offset="100%" stop-color="#0284c7"/>
+        </linearGradient>
+
+        <linearGradient id="driftBackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f8fafc"/>
+            <stop offset="100%" stop-color="#bae6fd"/>
+        </linearGradient>
+
+        <linearGradient id="driftFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#e0f2fe"/>
+        </linearGradient>
+
+        <linearGradient id="stickRed" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#b91c1c"/>
+        </linearGradient>
+
+        <!-- Measuring Stick Clip Boundary -->
+        <clipPath id="stickClip">
+            <rect x="48" y="12" width="6" height="52" rx="2.5"/>
+        </clipPath>
+
+        <!-- Bubbly Snowflake Template -->
+        <g id="snowflake">
+            <path d="M0,-3.5 L0,3.5 M-3,-1.75 L3,1.75 M-3,1.75 L3,-1.75" 
+                  stroke="url(#snowGrad)" stroke-width="1.6" stroke-linecap="round"/>
+        </g>
+    </defs>
+
+    <!-- 1. BACK SNOW DRIFT -->
+    <path d="M -5 85 L -5 36 Q 20 32 40 36 T 70 36 L 70 85 Z" fill="url(#driftBackGrad)">
+        <animateTransform attributeName="transform" type="translate" 
+            values="0 22; 0 0; 0 0; 0 22" 
+            keyTimes="0; 0.4; 0.85; 1" 
+            calcMode="spline" keySplines="0.4 0 0.2 1; 0 0 1 1; 0.4 0 1 1" 
+            dur="10s" repeatCount="indefinite" />
+    </path>
+
+    <!-- 2. MEASURING STAKE -->
+    <g filter="url(#softShadow)">
+        <g clip-path="url(#stickClip)">
+            <!-- Stake Base -->
+            <rect x="48" y="12" width="6" height="52" fill="#f8fafc"/>
+            <!-- High-Contrast Ticks -->
+            <rect x="48" y="16" width="6" height="4" fill="url(#stickRed)"/>
+            <rect x="48" y="24" width="6" height="4" fill="url(#stickRed)"/>
+            <rect x="48" y="32" width="6" height="4" fill="url(#stickRed)"/>
+            <rect x="48" y="40" width="6" height="4" fill="url(#stickRed)"/>
+            <rect x="48" y="48" width="6" height="4" fill="url(#stickRed)"/>
+            <rect x="48" y="56" width="6" height="4" fill="url(#stickRed)"/>
+        </g>
+    </g>
+
+    <!-- 3. FALLING SNOWFLAKES -->
+    <g>
+        <!-- Flake 1 (Left) -->
+        <g opacity="0">
+            <animateTransform attributeName="transform" type="translate" values="18,15; 18,55" dur="2.4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0; 1; 1; 0" dur="2.4s" keyTimes="0; 0.15; 0.8; 1" repeatCount="indefinite" />
+            <g>
+                <animateTransform attributeName="transform" type="rotate" values="0; 180" dur="2.4s" repeatCount="indefinite" />
+                <use href="#snowflake"/>
+            </g>
+        </g>
+
+        <!-- Flake 2 (Center-ish, smaller) -->
+        <g opacity="0">
+            <animateTransform attributeName="transform" type="translate" values="28,16; 28,53" begin="0.8s" dur="2.6s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0; 1; 1; 0" begin="0.8s" dur="2.6s" keyTimes="0; 0.15; 0.8; 1" repeatCount="indefinite" />
+            <g>
+                <animateTransform attributeName="transform" type="rotate" values="0; -180" begin="0.8s" dur="2.6s" repeatCount="indefinite" />
+                <g transform="scale(0.8)">
+                    <use href="#snowflake"/>
+                </g>
+            </g>
+        </g>
+        
+        <!-- Flake 3 (Right) -->
+        <g opacity="0">
+            <animateTransform attributeName="transform" type="translate" values="38,17; 38,54" begin="1.4s" dur="2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0; 1; 1; 0" begin="1.4s" dur="2s" keyTimes="0; 0.15; 0.8; 1" repeatCount="indefinite" />
+            <g>
+                <animateTransform attributeName="transform" type="rotate" values="0; 180" begin="1.4s" dur="2s" repeatCount="indefinite" />
+                <g transform="scale(0.9)">
+                    <use href="#snowflake"/>
+                </g>
+            </g>
+        </g>
+    </g>
+
+    <!-- 4. FRONT SNOW DRIFT -->
+    <g filter="url(#softShadow)">
+        <path d="M -5 85 L -5 42 Q 15 36 35 41 T 70 41 L 70 85 Z" fill="url(#driftFrontGrad)">
+            <animateTransform attributeName="transform" type="translate" 
+                values="0 22; 0 0; 0 0; 0 22" 
+                keyTimes="0; 0.4; 0.85; 1" 
+                calcMode="spline" keySplines="0.4 0 0.2 1; 0 0 1 1; 0.4 0 1 1" 
+                dur="10s" repeatCount="indefinite" />
+        </path>
+    </g>
+
+    <!-- 5. FLUFFY CLOUD -->
+    <g filter="url(#softShadow)">
+        <g transform="translate(4, -14) scale(0.8)">
+            <g>
+                <animateTransform attributeName="transform" type="translate" values="0,0; 0,2; 0,0" dur="4s" repeatCount="indefinite" />
+                <path d="M19,40 c-3.3,0-6-2.7-6-6 c0-3.3,2.7-6,6-6 c0.4,0,0.8,0,1.2,0.1 
+                         C21.7,24,25.9,20,31,20 c5.1,0,9.3,4,10.8,8.1 c0.4-0.1,0.8-0.1,1.2-0.1 
+                         c3.3,0,6,2.7,6,6 c0,3.3-2.7,6-6,6 H19 z" 
+                      fill="url(#cloudGrad)" />
+            </g>
+        </g>
+    </g>
 </svg>
