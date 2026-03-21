@@ -783,6 +783,10 @@
     </style>
 
     <script>
+		const LATITUDE = 42.4058459560502;
+		const LONGITUDE = -83.67106870545311;
+		const ELEVATION = 285;
+		
 		const iconMap = {
 			"clear-day": "clear-day.svg",
 			"clear-night": "clear-night.svg",
@@ -1289,6 +1293,10 @@
 			return startOfToday;
 		}
 		
+		function getObserver(latitude, longitude, elevation) {
+			return new Astronomy.Observer(latitude, longitude, elevation);
+		}
+		
 		function getSunrise(observer) {
 			return Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, 1, getStartOfToday(), 1);
 		}
@@ -1306,7 +1314,7 @@
 		}
 		
 		function updateSunMoonTimes(latitude, longitude, elevation) {
-			const observer = new Astronomy.Observer(latitude, longitude, elevation);
+			const observer = getObserver(latitude, longitude, elevation);
 			const sunrise = getSunrise(observer);
 			const sunset = getSunset(observer);
 			const moonrise = getMoonrise(observer);
@@ -1423,7 +1431,7 @@
 		function updateAQI(aqi) {
 			if (aqi === null || aqi === undefined) {
 				document.getElementById("aqi-val").textContent = "--";
-				document.getElementById("aqi-desc").textContent = "Unavail";
+				document.getElementById("aqi-desc").textContent = "Unavailable";
 				return;
 			}
 
@@ -1489,11 +1497,8 @@
 
 				const vcData = await vcResponse.json();
 				console.log("vcData.currentConditions", vcData.currentConditions);
-				const latitude = 42.4058459560502;
-				const longitude = -83.67106870545311;
-				const elevation = 285;
-				const latDMS = toDMS(latitude, true);
-				const lonDMS = toDMS(longitude, false);
+				const latDMS = toDMS(LATITUDE, true);
+				const lonDMS = toDMS(LONGITUDE, false);
 				const gpsCoordinates = `${latDMS}, ${lonDMS}`;
 
 				//const lines = metarText.trim().split("\n");
@@ -1531,12 +1536,12 @@
 					pressureTrendIcon.title = "Pressure " + pressureTrendIconDescription;
 				}
 				
-				updateSunMoonTimes(latitude, longitude, elevation);
+				updateSunMoonTimes(LATITUDE, LONGITUDE, ELEVATION);
 				updateMoonPhaseIcon(Astronomy.MoonPhase(new Date()));
 				
-				const uvIndex = await getUVIndexValue(latitude, longitude, vcData.currentConditions.uvindex);
-				updateUVIndexIcon(uvIndex, latitude, longitude, vcData.currentConditions.cloudcover);
-				const currentAqi = await getAQIValue(latitude, longitude);
+				const uvIndex = await getUVIndexValue(LATITUDE, LONGITUDE, vcData.currentConditions.uvindex);
+				updateUVIndexIcon(uvIndex, LATITUDE, LONGITUDE, vcData.currentConditions.cloudcover);
+				const currentAqi = await getAQIValue(LATITUDE, LONGITUDE);
 				updateAQI(currentAqi);
 				
 				// High / Low from VC
