@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <defs>
+    <!-- Soft Drop Shadow -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#041246" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Pole Gradient -->
+    <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Inner Hole Gradient (depth inside ring) -->
+    <linearGradient id="innerHoleGrad" x1="14" y1="0" x2="22" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="40%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+
+    <!-- Anti-aliased 5-stripe gradient (aligned for the sock) -->
+    <linearGradient id="stripePattern" x1="18" y1="18" x2="62" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="19.5%" stop-color="#ef4444"/>
+      <stop offset="20.5%" stop-color="#f8fafc"/>
+      <stop offset="39.5%" stop-color="#f8fafc"/>
+      <stop offset="40.5%" stop-color="#ef4444"/>
+      <stop offset="59.5%" stop-color="#ef4444"/>
+      <stop offset="60.5%" stop-color="#f8fafc"/>
+      <stop offset="79.5%" stop-color="#f8fafc"/>
+      <stop offset="80.5%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+
+    <!-- 3D fabric shading -->
+    <linearGradient id="fabricShine" x1="1" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.18"/>
+      <stop offset="25%" stop-color="#ffffff" stop-opacity="0.44"/>
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.52"/>
+    </linearGradient>
+
+    <!-- Clip for cap so the stripe gradient only shows on the cap shape -->
+    <clipPath id="capClip">
+      <path d="M18 10 A3 8 0 0 0 18 14 C20 14, 23 14, 25 15 L25 20 C23 19, 21 19, 18 19 Z"/>
+    </clipPath>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <!-- Pole base shadow -->
+    <ellipse cx="14" cy="56" rx="6" ry="1.5" fill="#041246" opacity="0.2"/>
+
+    <!-- Pole -->
+    <rect x="12" y="14" width="4" height="42" rx="2" fill="url(#poleGrad)"/>
+    <circle cx="14" cy="14" r="3" fill="url(#poleGrad)"/>
+    <rect x="14" y="16.5" width="4" height="3" fill="#94a3b8"/>
+
+    <!-- Windsock group (80% wind, derived from windsock-5 baseline) -->
+    <g>
+      <!-- Small, fairly quick oscillation for 80% -->
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        values="-1 18 18; 2 18 18; -1 18 18"
+        dur="2.0s"
+        calcMode="spline"
+        keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+        repeatCount="indefinite"/>
+
+      <!-- Mounting ring with inner depth -->
+      <ellipse cx="18" cy="18" rx="4" ry="9" fill="url(#innerHoleGrad)" stroke="#94a3b8" stroke-width="2"/>
+
+      <!-- Dark inner hole (Mouth) -->
+      <path d="M 18 10 A 3 8 0 0 1 18 26 Z" fill="#7f1d1d"/>
+
+      <!-- 
+          NEW: Dark Inner Tail Hole
+          Drawn behind the main fabric to form the back inner wall of the tube.
+      -->
+      <path fill="#450a0a">
+        <animate attributeName="d"
+                 dur="2.0s"
+                 repeatCount="indefinite"
+                 values="
+                   M 60 24 A 4 2 -10 0 0 54 26 A 4 2 -10 0 1 60 24 Z;
+                   M 61 23 A 4 2 -10 0 0 55 25 A 4 2 -10 0 1 61 23 Z;
+                   M 59 25 A 4 2 -10 0 0 53 27 A 4 2 -10 0 1 59 25 Z;
+                   M 60 24 A 4 2 -10 0 0 54 26 A 4 2 -10 0 1 60 24 Z"/>
+      </path>
+
+      <!-- Cap: clipped rectangle filled with the same stripe gradient so the first stripe continues seamlessly -->
+      <g clip-path="url(#capClip)">
+        <!-- position and size chosen to align stripe lines with the sock body -->
+        <rect x="16" y="9.5" width="14" height="12" fill="url(#stripePattern)"/>
+      </g>
+
+      <!-- Main fabric - striped body (full top and bottom contours, slight downward taper) -->
+      <path fill="url(#stripePattern)">
+        <animate attributeName="d"
+                 dur="2.0s"
+                 repeatCount="indefinite"
+                 values="
+                   M 18 10 C 40 10, 56 16, 60 24 A 4 2 -10 0 1 54 26 C 44 24, 32 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 41 9.5, 57 15.5, 61 23 A 4 2 -10 0 1 55 25 C 45 23.5, 33 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 39 10.5, 55 16.5, 59 25 A 4 2 -10 0 1 53 27 C 43 24.5, 31.5 26.2, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 40 10, 56 16, 60 24 A 4 2 -10 0 1 54 26 C 44 24, 32 26, 18 26 A 3 8 0 0 0 18 10 Z"/>
+      </path>
+
+      <!-- 3D shading overlay (matches motion) -->
+      <path fill="url(#fabricShine)">
+        <animate attributeName="d"
+                 dur="2.0s"
+                 repeatCount="indefinite"
+                 values="
+                   M 18 10 C 40 10, 56 16, 60 24 A 4 2 -10 0 1 54 26 C 44 24, 32 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 41 9.5, 57 15.5, 61 23 A 4 2 -10 0 1 55 25 C 45 23.5, 33 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 39 10.5, 55 16.5, 59 25 A 4 2 -10 0 1 53 27 C 43 24.5, 31.5 26.2, 18 26 A 3 8 0 0 0 18 10 Z;
+                   M 18 10 C 40 10, 56 16, 60 24 A 4 2 -10 0 1 54 26 C 44 24, 32 26, 18 26 A 3 8 0 0 0 18 10 Z"/>
+      </path>
+
+      <!-- Front hem / lip -->
+      <path d="M 18 10 A 3 8 0 0 0 18 26" fill="none" stroke="#fca5a5" stroke-width="1.2"/>
+
+      <!-- 
+          NEW: Tail Hem Highlight 
+          A subtle, thin light stroke overlaid on the trailing edge.
+      -->
+      <path fill="none" stroke="#fca5a5" stroke-width="0.8" opacity="0.8">
+        <animate attributeName="d"
+                 dur="2.0s"
+                 repeatCount="indefinite"
+                 values="
+                   M 60 24 A 4 2 -10 0 1 54 26;
+                   M 61 23 A 4 2 -10 0 1 55 25;
+                   M 59 25 A 4 2 -10 0 1 53 27;
+                   M 60 24 A 4 2 -10 0 1 54 26"/>
+      </path>
+    </g>
+  </g>
+</svg>

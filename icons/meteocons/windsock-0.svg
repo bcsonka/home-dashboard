@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+    <defs>
+        <!-- Soft Drop Shadow for Depth -->
+        <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#041246" flood-opacity="0.15"/>
+        </filter>
+        
+        <!-- Pole Gradient (Smooth Silver) -->
+        <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#cbd5e1"/>
+            <stop offset="50%" stop-color="#f8fafc"/>
+            <stop offset="100%" stop-color="#94a3b8"/>
+        </linearGradient>
+
+        <!-- 
+            INNER HOLE GRADIENT (New)
+            Fills the empty space in the hoop. Starts bright red on the left side 
+            and smoothly recedes into deep dark shadow on the right.
+        -->
+        <linearGradient id="innerHoleGrad" x1="14" y1="0" x2="22" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="40%" stop-color="#dc2626"/>
+            <stop offset="100%" stop-color="#7f1d1d"/>
+        </linearGradient>
+
+        <!-- VERTICAL ANTI-ALIASED 5-STRIPE GRADIENT -->
+        <linearGradient id="calmStripe" x1="0" y1="10" x2="0" y2="57" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="19.5%" stop-color="#ef4444"/>
+            <stop offset="20.5%" stop-color="#f8fafc"/>
+            <stop offset="39.5%" stop-color="#f8fafc"/>
+            <stop offset="40.5%" stop-color="#ef4444"/>
+            <stop offset="59.5%" stop-color="#ef4444"/>
+            <stop offset="60.5%" stop-color="#f8fafc"/>
+            <stop offset="79.5%" stop-color="#f8fafc"/>
+            <stop offset="80.5%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#ef4444"/>
+        </linearGradient>
+
+        <!-- 3D FABRIC CYLINDER SHADING (Horizontal overlay) -->
+        <linearGradient id="calmShine" x1="17" y1="0" x2="27" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#000000" stop-opacity="0.35"/>
+            <stop offset="25%" stop-color="#ffffff" stop-opacity="0.4"/>
+            <stop offset="60%" stop-color="#000000" stop-opacity="0.0"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity="0.4"/>
+        </linearGradient>
+    </defs>
+
+    <!-- MAIN WINDSOCK ASSEMBLY -->
+    <g filter="url(#softShadow)">
+        
+        <!-- Pole Base Shadow -->
+        <ellipse cx="14" cy="56" rx="6" ry="1.5" fill="#041246" opacity="0.2"/>
+
+        <!-- Silver Pole -->
+        <rect x="12" y="14" width="4" height="42" rx="2" fill="url(#poleGrad)"/>
+        <!-- Pole Top Cap -->
+        <circle cx="14" cy="14" r="3" fill="url(#poleGrad)"/>
+        <!-- Mounting Arm -->
+        <rect x="14" y="16.5" width="4" height="3" fill="#94a3b8"/>
+
+        <!-- Animated Windsock (Pivots smoothly from mount) -->
+        <g>
+            <!-- Very slow, gentle pendulum sway mimicking 0mph calm conditions -->
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="-1.5 18 18; 1.5 18 18; -1.5 18 18" 
+                dur="5s" 
+                calcMode="spline" 
+                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1" 
+                repeatCount="indefinite"/>
+            
+            <!-- 
+                MOUNTING RING & INSIDE WALL
+                The new gradient fills the previously empty void with the red fabric 
+                receding naturally into the dark tube.
+            -->
+            <ellipse cx="18" cy="18" rx="4" ry="9" fill="url(#innerHoleGrad)" stroke="#94a3b8" stroke-width="2"/>
+
+            <!-- FABRIC LAYER - BASE STRIPES -->
+            <path fill="url(#calmStripe)">
+                <animate attributeName="d"
+                    values="
+                        M 18 10 C 25 10.5, 27 16, 26 24 C 25 35, 23 48, 22 57 A 1.5 1 0 0 1 19 57 C 18.5 48, 18 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 25.5 10.5, 27.5 16, 26.5 24 C 25.5 35, 23.5 48, 22.5 57 A 1.5 1 0 0 1 19.5 57 C 19 48, 18.2 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 24.5 10.5, 26 16, 25 24 C 24 35, 22 48, 21.5 56.5 A 1.5 1 0 0 1 18.5 56.5 C 18 48, 17.8 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 25 10.5, 27 16, 26 24 C 25 35, 23 48, 22 57 A 1.5 1 0 0 1 19 57 C 18.5 48, 18 35, 18 26 A 3 8 0 0 0 18 10 Z
+                    "
+                    dur="5s"
+                    repeatCount="indefinite" />
+            </path>
+
+            <!-- FABRIC LAYER - 3D SHADING OVERLAY -->
+            <path fill="url(#calmShine)">
+                <animate attributeName="d"
+                    values="
+                        M 18 10 C 25 10.5, 27 16, 26 24 C 25 35, 23 48, 22 57 A 1.5 1 0 0 1 19 57 C 18.5 48, 18 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 25.5 10.5, 27.5 16, 26.5 24 C 25.5 35, 23.5 48, 22.5 57 A 1.5 1 0 0 1 19.5 57 C 19 48, 18.2 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 24.5 10.5, 26 16, 25 24 C 24 35, 22 48, 21.5 56.5 A 1.5 1 0 0 1 18.5 56.5 C 18 48, 17.8 35, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 25 10.5, 27 16, 26 24 C 25 35, 23 48, 22 57 A 1.5 1 0 0 1 19 57 C 18.5 48, 18 35, 18 26 A 3 8 0 0 0 18 10 Z
+                    "
+                    dur="5s"
+                    repeatCount="indefinite" />
+            </path>
+            
+            <!-- Front Hem / Lip of the Windsock (Rigid inner highlight) -->
+            <path d="M 18 10 A 3 8 0 0 0 18 26" fill="none" stroke="#fca5a5" stroke-width="1.2"/>
+        </g>
+    </g>
+</svg>

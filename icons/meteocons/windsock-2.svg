@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+    <defs>
+        <!-- Soft Drop Shadow for Depth -->
+        <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#041246" flood-opacity="0.15"/>
+        </filter>
+        
+        <!-- Pole Gradient (Smooth Silver) -->
+        <linearGradient id="poleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#cbd5e1"/>
+            <stop offset="50%" stop-color="#f8fafc"/>
+            <stop offset="100%" stop-color="#94a3b8"/>
+        </linearGradient>
+
+        <!-- Inner Hole Gradient (Fills the hoop with receding 3D depth) -->
+        <linearGradient id="innerHoleGrad" x1="14" y1="0" x2="22" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="40%" stop-color="#dc2626"/>
+            <stop offset="100%" stop-color="#7f1d1d"/>
+        </linearGradient>
+
+        <!-- DIAGONAL 5-STRIPE GRADIENT FOR 40% WIND (more horizontal than 20%) -->
+        <linearGradient id="mediumWindStripe" x1="18" y1="18" x2="48" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="19.5%" stop-color="#ef4444"/>
+            <stop offset="20.5%" stop-color="#f8fafc"/>
+            <stop offset="39.5%" stop-color="#f8fafc"/>
+            <stop offset="40.5%" stop-color="#ef4444"/>
+            <stop offset="59.5%" stop-color="#ef4444"/>
+            <stop offset="60.5%" stop-color="#f8fafc"/>
+            <stop offset="79.5%" stop-color="#f8fafc"/>
+            <stop offset="80.5%" stop-color="#ef4444"/>
+            <stop offset="100%" stop-color="#ef4444"/>
+        </linearGradient>
+
+        <!-- 3D FABRIC SHADING FOR 40% WIND (tauter, more directional) -->
+        <linearGradient id="mediumWindShine" x1="1" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stop-color="#000000" stop-opacity="0.22"/>
+            <stop offset="25%" stop-color="#ffffff" stop-opacity="0.45"/>
+            <stop offset="60%" stop-color="#000000" stop-opacity="0.0"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity="0.5"/>
+        </linearGradient>
+    </defs>
+
+    <!-- MAIN WINDSOCK ASSEMBLY -->
+    <g filter="url(#softShadow)">
+        
+        <!-- Pole Base Shadow -->
+        <ellipse cx="14" cy="56" rx="6" ry="1.5" fill="#041246" opacity="0.2"/>
+
+        <!-- Silver Pole -->
+        <rect x="12" y="14" width="4" height="42" rx="2" fill="url(#poleGrad)"/>
+        <!-- Pole Top Cap -->
+        <circle cx="14" cy="14" r="3" fill="url(#poleGrad)"/>
+        <!-- Mounting Arm -->
+        <rect x="14" y="16.5" width="4" height="3" fill="#94a3b8"/>
+
+        <!-- Animated Windsock (40% wind, moderately lifted and inflated) -->
+        <g>
+            <!-- Slightly quicker, more stable oscillation than 20% wind -->
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="0 18 18; 2 18 18; 0 18 18" 
+                dur="2.8s" 
+                calcMode="spline" 
+                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1" 
+                repeatCount="indefinite"/>
+
+            <!-- Mounting Ring & Inside Wall -->
+            <ellipse cx="18" cy="18" rx="4" ry="9" fill="url(#innerHoleGrad)" stroke="#94a3b8" stroke-width="2"/>
+
+            <!-- 
+                NEW: Dark Inner Tail Hole
+                Drawn behind the main fabric. It forms the back inner wall of the tube, 
+                giving the realistic illusion of an open hole facing down-right.
+            -->
+            <path fill="#450a0a">
+                <animate attributeName="d"
+                    values="
+                        M 50 34 A 4 2 -20 0 0 44 36 A 4 2 -20 0 1 50 34 Z;
+                        M 52 33 A 4 2 -20 0 0 46 35 A 4 2 -20 0 1 52 33 Z;
+                        M 49 35 A 4 2 -20 0 0 43 37 A 4 2 -20 0 1 49 35 Z;
+                        M 50 34 A 4 2 -20 0 0 44 36 A 4 2 -20 0 1 50 34 Z
+                    "
+                    dur="2.8s"
+                    repeatCount="indefinite" />
+            </path>
+
+            <!-- FABRIC LAYER - BASE STRIPES (more horizontal, moderately taut) -->
+            <path fill="url(#mediumWindStripe)">
+                <animate attributeName="d"
+                    values="
+                        M 18 10 C 34 10, 44 20, 50 34 A 4 2 -20 0 1 44 36 C 36 30, 28 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 35 9.5, 46 19.5, 52 33 A 4 2 -20 0 1 46 35 C 37 29.5, 29 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 33 10.5, 42 20.5, 49 35 A 4 2 -20 0 1 43 37 C 35 30.5, 27.5 26.2, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 34 10, 44 20, 50 34 A 4 2 -20 0 1 44 36 C 36 30, 28 26, 18 26 A 3 8 0 0 0 18 10 Z
+                    "
+                    dur="2.8s"
+                    repeatCount="indefinite" />
+            </path>
+
+            <!-- FABRIC LAYER - 3D SHADING OVERLAY (matches the same ripple) -->
+            <path fill="url(#mediumWindShine)">
+                <animate attributeName="d"
+                    values="
+                        M 18 10 C 34 10, 44 20, 50 34 A 4 2 -20 0 1 44 36 C 36 30, 28 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 35 9.5, 46 19.5, 52 33 A 4 2 -20 0 1 46 35 C 37 29.5, 29 26, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 33 10.5, 42 20.5, 49 35 A 4 2 -20 0 1 43 37 C 35 30.5, 27.5 26.2, 18 26 A 3 8 0 0 0 18 10 Z;
+                        M 18 10 C 34 10, 44 20, 50 34 A 4 2 -20 0 1 44 36 C 36 30, 28 26, 18 26 A 3 8 0 0 0 18 10 Z
+                    "
+                    dur="2.8s"
+                    repeatCount="indefinite" />
+            </path>
+            
+            <!-- Front Lip of the main Mount Hoop -->
+            <path d="M 18 10 A 3 8 0 0 0 18 26" fill="none" stroke="#fca5a5" stroke-width="1.2"/>
+
+            <!-- 
+                NEW: Tail Hem Highlight 
+                A subtle, thin light stroke overlaid on the trailing edge to mimic 
+                physical fabric catching the light.
+            -->
+            <path fill="none" stroke="#fca5a5" stroke-width="0.8" opacity="0.8">
+                <animate attributeName="d"
+                    values="
+                        M 50 34 A 4 2 -20 0 1 44 36;
+                        M 52 33 A 4 2 -20 0 1 46 35;
+                        M 49 35 A 4 2 -20 0 1 43 37;
+                        M 50 34 A 4 2 -20 0 1 44 36
+                    "
+                    dur="2.8s"
+                    repeatCount="indefinite" />
+            </path>
+        </g>
+    </g>
+</svg>

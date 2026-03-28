@@ -311,9 +311,24 @@
 		.wind-icon {
 			height: 90px;
 			width: 90px;
-			margin-right: -24px;
 			object-fit: contain;
 			opacity: 0.9;
+		}
+		
+		.wind-icon-0 {
+			margin-right: -32px;
+		}
+		
+		.wind-icon-1 {
+			margin-right: -16px;
+		}
+		
+		.wind-icon-2 {
+			margin-right: -8px;
+		}
+		
+		.wind-icon-3, .wind-icon-4, .wind-icon-5, .wind-icon-6 {
+			margin-right: 0px;
 		}
 		
 		.humidity {
@@ -1197,9 +1212,19 @@
 			else return "high";
 		}
 		
+		function getWindsockIconFilenameSuffix(windMph) {
+			if(windMph < 2) return "0";
+			else if(windMph < 6) return "1";
+			else if(windMph < 8) return "2";
+			else if(windMph < 11) return "3";
+			else if(windMph < 14) return "4";
+			else if(windMph < 18) return "5";
+			else return "6";
+		}
+		
 		function getWindsockIconFilename(windMph) {
-			const windSpeedDesc = getWindSpeedDesc(windMph);
-			return `windsock-${windSpeedDesc}.svg`;
+			const windsockIconFilenameSuffix = getWindsockIconFilenameSuffix(windMph);
+			return `windsock-${windsockIconFilenameSuffix}.svg`;
 		}
 		
 		function formatForecastDay(dateStr) {
@@ -1706,6 +1731,9 @@
 				const windsockIconFilename = getWindsockIconFilename(windMph);
 				const windsockIcon = document.querySelector(".wind-icon");
 				windsockIcon.src = `icons/meteocons/${windsockIconFilename}`;
+				windsockIcon.classList.remove(...[...windsockIcon.classList].filter(cls => cls.startsWith('wind-icon-')));
+				windsockIcon.classList.add("wind-icon-" + getWindsockIconFilenameSuffix(windMph));
+
 				const windSpeedDesc = getWindSpeedDesc(windMph);
 				windsockIcon.title = "Wind Speed - " + windSpeedDesc.charAt(0).toUpperCase() + windSpeedDesc.slice(1);
 				document.querySelector(".wind-arrow").style.transform = `translate(-50%, -50%) rotate(${windDir}deg)`;
