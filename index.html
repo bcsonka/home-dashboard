@@ -513,8 +513,8 @@
 		}
 
 		.barometer-gauge {
-			width: 70px;
-			height: 70px;
+			width: 60px;
+			height: 60px;
 		}
 
 		.barometer-gauge svg {
@@ -523,23 +523,11 @@
 			display: block;
 		}
 
-		.barometer-trend {
-			width: 64px;
-			height: 64px;
-			object-fit: contain;
-			opacity: 0.9;
-			margin-left: -24px;
-		}
-
 		.barometer-value {
 			font-size: 28px;
 			margin-left: 8px;
 			padding: 0;
 			position: relative;
-		}
-		
-		.barometer-value.trend {
-			margin-left: -16px;
 		}
 		
 		#bg-video {
@@ -1545,20 +1533,20 @@
 
 				const pressureValueElement = document.querySelector(".barometer-value");
 				pressureValueElement.textContent = `${pressure.toFixed(2)} inHg`;
-				pressureValueElement.classList.remove("trend");
 				
 				const pressureTrend = getPressureTrend(metar.raw);
-				const pressureTrendIcon = document.querySelector(".barometer-trend");
-				
-				if(pressureTrend === "steady") {
-					pressureTrendIcon.style.display = "none";
-				} else {
-					pressureTrendIcon.src = `icons/meteocons/pressure-${pressureTrend}.svg`;
-					pressureTrendIcon.style.display = "block";
-					pressureValueElement.classList.add("trend");
-					
-					let pressureTrendIconDescription = pressureTrend.replaceAll("-", "");
-					pressureTrendIcon.title = "Pressure " + pressureTrendIconDescription;
+
+				// 1. Hide all internal SVG trend chevrons first
+				const trendIds = ["trend-rising", "trend-falling", "trend-rising-rapid", "trend-falling-rapid"];
+				trendIds.forEach(id => {
+					const el = document.getElementById(id);
+					if (el) el.style.display = "none";
+				});
+
+				// 2. If the pressure isn't steady, reveal the matching chevron inside the SVG
+				if (pressureTrend !== "steady") {
+					const activeTrend = document.getElementById(`trend-${pressureTrend}`);
+					if (activeTrend) activeTrend.style.display = "block";
 				}
 				
 				updateSunMoonTimes(LATITUDE, LONGITUDE, ELEVATION);
@@ -2098,7 +2086,6 @@
 
 				<div class="barometer-block">
 					<div class="barometer-gauge"></div>
-					<img class="barometer-trend" />
 					<div class="barometer-value outline"></div>
 				</div>
 			</div>
