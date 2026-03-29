@@ -415,7 +415,7 @@
 		.wind-info {
 			display: flex;
 			flex-direction: column;
-			margin-left: 6px;
+			margin-left: 0px;
 			margin-top: 10px;
 		}
 		.wind-speed {
@@ -764,6 +764,7 @@
 			flex-direction: column;
 			justify-content: center;
 			margin-top: 12px;
+			margin-left: 12px;
 		}
 
 		.aqi-value {
@@ -2035,35 +2036,73 @@
 				</div>
 
 				<div class="aqi-block">
-					<!-- Inline SVG Gauge (Medium Thickness) -->
+					<!-- Inline SVG Gauge (Premium Glassmorphic - Thick Band & Longer Needle) -->
 					<svg class="aqi-icon outline" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 						<defs>
-							<!-- Expanded the filter region (x, y, width, height) to prevent clipping of thick strokes and shadows -->
+							<!-- Soft drop shadow for depth -->
 							<filter id="gauge-shadow" x="-50%" y="-50%" width="200%" height="200%">
-								<feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/>
+								<feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.5"/>
 							</filter>
 						</defs>
 
-						<!-- The 6 colored segments (Stroke-width 16, Radius 32) -->
-						<g fill="none" stroke-width="16" filter="url(#gauge-shadow)">
-							<path stroke="#00e400" d="M 18 70 A 32 32 0 0 1 22.287 54" />
-							<path stroke="#ffff00" d="M 22.287 54 A 32 32 0 0 1 34 42.287" />
-							<path stroke="#ff7e00" d="M 34 42.287 A 32 32 0 0 1 50 38" />
-							<path stroke="#ff0000" d="M 50 38 A 32 32 0 0 1 66 42.287" />
-							<path stroke="#8f3f97" d="M 66 42.287 A 32 32 0 0 1 77.713 54" />
-							<path stroke="#7e0023" d="M 77.713 54 A 32 32 0 0 1 82 70" />
+						<!-- 1. Glass Casing Background -->
+						<!-- Frosted backing fill -->
+						<path d="M 2 70 A 48 48 0 0 1 98 70 Z" fill="rgba(0, 0, 0, 0.4)" />
+						<!-- Outer silver rim -->
+						<path d="M 2 70 A 48 48 0 0 1 98 70" fill="none" stroke="#cbd5e1" stroke-width="2" />
+						<!-- Bottom flat structural base -->
+						<line x1="2" y1="70" x2="98" y2="70" stroke="#cbd5e1" stroke-width="2" opacity="0.6" />
+						
+						<!-- Inner Depth Ring (Creates a subtle 3D bevel) -->
+						<path d="M 5 70 A 45 45 0 0 1 95 70" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.15" />
+
+						<!-- 2. Minimalist Tick Marks -->
+						<!-- Rotated elegantly around the (50, 70) pivot point -->
+						<g stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(0 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(30 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(60 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(90 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(120 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(150 50 70)" />
+							<line x1="7" y1="70" x2="10" y2="70" transform="rotate(180 50 70)" />
 						</g>
 
-						<!-- The Animatable Needle -->
+						<!-- Dark Track Background (Sits behind the colored arcs) -->
+						<!-- R=34, Stroke=12 -->
+						<path d="M 16 70 A 34 34 0 0 1 84 70" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="12" />
+
+						<!-- 3. Colored EPA AQI Segments (Thickened to 12) -->
+						<g stroke-width="12" filter="url(#gauge-shadow)">
+							<!-- Good (Soft Green) -->
+							<path stroke="#22c55e" d="M 16 70 A 34 34 0 0 1 20.56 53" />
+							<!-- Moderate (Soft Yellow) -->
+							<path stroke="#eab308" d="M 20.56 53 A 34 34 0 0 1 33 40.56" />
+							<!-- Sensitive (Soft Orange) -->
+							<path stroke="#f97316" d="M 33 40.56 A 34 34 0 0 1 50 36" />
+							<!-- Unhealthy (Soft Red) -->
+							<path stroke="#ef4444" d="M 50 36 A 34 34 0 0 1 67 40.56" />
+							<!-- Very Unhealthy (Soft Purple) -->
+							<path stroke="#a855f7" d="M 67 40.56 A 34 34 0 0 1 79.44 53" />
+							<!-- Hazardous (Maroon) -->
+							<path stroke="#be123c" d="M 79.44 53 A 34 34 0 0 1 84 70" />
+						</g>
+
+						<!-- 4. Subtle AQI Label -->
+						<text x="50" y="87" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">AQI</text>
+
+						<!-- 5. Glass Glare / Reflection (Premium UI Touch) -->
+						<path d="M 12 56 A 42 42 0 0 1 40 29.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.15" />
+
+						<!-- 6. The Animatable Needle -->
 						<g id="aqi-needle" filter="url(#gauge-shadow)">
-							<!-- The pointer -->
-							<path d="M 50 66 L 14 69.2 A 1 1 0 0 0 14 70.8 L 50 74 Z" fill="#ffffff" />
-							<!-- Center Pivot point -->
-							<circle cx="50" cy="70" r="5.5" fill="#2a2a40" stroke="#ffffff" stroke-width="2.5"/>
+							<!-- Sleek Needle Pointer (Extended to X=14 so it reaches over the colored band) -->
+							<line x1="50" y1="70" x2="14" y2="70" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" />
+							
+							<!-- Center Pivot Hardware -->
+							<circle cx="50" cy="70" r="4.5" fill="#f8fafc" />
+							<circle cx="50" cy="70" r="2.5" fill="#0f172a" />
 						</g>
-
-						<!-- Subtle AQI Label below the pivot -->
-						<text x="50" y="88" font-family="inherit" font-size="14" font-weight="600" fill="#ffffff" opacity="0.8" text-anchor="middle" filter="url(#gauge-shadow)" letter-spacing="1">AQI</text>
 					</svg>
 					<div class="aqi-info outline">
 						<div class="aqi-value" id="aqi-val">--</div>
