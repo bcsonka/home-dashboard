@@ -1195,10 +1195,19 @@
 		}
 		
 		function getWindSpeedDesc(windMph) {
-			if(windMph < 5) return "calm";
-			else if(windMph < 9) return "low";
-			else if(windMph < 18) return "moderate";
-			else return "high";
+			if (windMph < 1) return "Calm";
+			if (windMph < 4) return "Light Air";
+			if (windMph < 8) return "Light Breeze";
+			if (windMph < 13) return "Gentle";
+			if (windMph < 19) return "Moderate";
+			if (windMph < 25) return "Fresh";
+			if (windMph < 32) return "Strong";
+			if (windMph < 39) return "Very Strong";
+			if (windMph < 47) return "Gale";
+			if (windMph < 55) return "Severe Gale";
+			if (windMph < 64) return "Storm";
+			if (windMph < 73) return "Violent Storm";
+			return "Hurricane Force";
 		}
 		
 		function getWindsockIconFilenameSuffix(windMph) {
@@ -1722,8 +1731,7 @@
 				windsockIcon.classList.remove(...[...windsockIcon.classList].filter(cls => cls.startsWith('wind-icon-')));
 				windsockIcon.classList.add("wind-icon-" + getWindsockIconFilenameSuffix(windMph));
 
-				const windSpeedDesc = getWindSpeedDesc(windMph);
-				windsockIcon.title = "Wind Speed - " + windSpeedDesc.charAt(0).toUpperCase() + windSpeedDesc.slice(1);
+				windsockIcon.title = getWindSpeedDesc(windMph);
 				document.querySelector(".wind-arrow").style.transform = `translate(-50%, -50%) rotate(${windDir}deg)`;
 				document.querySelector(".wind-compass").title = `Wind Origin - ${windDir}°`;
 				document.querySelector(".wind-speed").textContent = `${Math.round(windMph)} mph ${windDir != null && windMph > 0 ? degreesToCompassDirection(windDir) : ""}`;
