@@ -420,6 +420,9 @@
 		}
 		.wind-speed {
 			font-size: 32px;
+			margin-top: -16px;
+		}
+		.wind-speed.gust {
 			margin-top: -4px;
 		}
 		.wind-gust {
@@ -1738,8 +1741,10 @@
 
 				if (gustMph != null && gustMph > windMph) {
 					document.querySelector(".wind-gust").innerHTML = `<img src="icons/meteocons/wind.svg" class="gust-icon" title="Wind Gusts"> ${Math.round(gustMph)} mph`;
+					document.querySelector(".wind-speed").classList.add("gust");
 				} else {
 					document.querySelector(".wind-gust").textContent = "";
+					document.querySelector(".wind-speed").classList.remove("gust");
 				}
 
 				// Humidity from METAR (derived)
