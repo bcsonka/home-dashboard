@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <defs>
+    <!-- Thermometer Glass (Semi-transparent frost) -->
+    <linearGradient id="glassBodyCo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#F8FAFC" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#CBD5E1" stop-opacity="0.8" />
+    </linearGradient>
+
+    <!-- Thermometer Fluid (Vibrant cyan dropping to freezing navy) -->
+    <linearGradient id="coldFluidCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#1E3A8A" />
+    </linearGradient>
+
+    <!-- Cold Radiating Ripples -->
+    <radialGradient id="rippleGradCo" cx="50%" cy="50%" r="50%">
+      <stop offset="80%" stop-color="#7DD3FC" stop-opacity="0" />
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.8" />
+    </radialGradient>
+
+    <!-- Person: Puffy Jacket (Slate to Deep Navy) -->
+    <linearGradient id="jacketGradCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#64748B" />
+      <stop offset="50%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+
+    <!-- Person: Scarf (Vibrant Blue) -->
+    <linearGradient id="scarfGradCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+
+    <!-- Person: Hat (Ice Blue) -->
+    <linearGradient id="hatGradCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#7DD3FC" />
+    </linearGradient>
+
+    <!-- Person: Skin & Freezing Nose -->
+    <linearGradient id="skinGradCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFEDD5" />
+      <stop offset="100%" stop-color="#FDBA74" />
+    </linearGradient>
+    <radialGradient id="noseGradCo" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#FECDD3" /> <!-- Rosy blush pink -->
+      <stop offset="50%" stop-color="#FDA4AF" /> <!-- Soft coral rose -->
+      <stop offset="100%" stop-color="#F43F5E" /> <!-- Natural red-rose blush -->
+    </radialGradient>
+
+    <!-- Jeremy Allen White-styled hair (Wavy texture, dirty blonde/golden-brown curls) -->
+    <linearGradient id="hairGradCo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D97706" /> <!-- Gold/Ambar -->
+      <stop offset="50%" stop-color="#783F04" /> <!-- Warm rich brown -->
+      <stop offset="100%" stop-color="#3F1B02" /> <!-- Dark brown base -->
+    </linearGradient>
+
+    <!-- Frosty Breath Vapor -->
+    <radialGradient id="breathGradCo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Wind Gusts -->
+    <linearGradient id="windGradCo" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7DD3FC" stop-opacity="0" />
+      <stop offset="20%" stop-color="#BAE6FD" stop-opacity="0.7" />
+      <stop offset="80%" stop-color="#38BDF8" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0284C7" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Shadows & Filters -->
+    <filter id="uiShadowCo" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#020617" flood-opacity="0.4" />
+    </filter>
+    <filter id="softShadowCo" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1" flood-color="#020617" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <g>
+    <!-- Background wind gust -->
+    <path d="M-10,26 C 15,26 25,16 55,26 C 65,29 70,26 80,26" fill="none" stroke="url(#windGradCo)" stroke-width="2" stroke-linecap="round" stroke-dasharray="80 120" stroke-dashoffset="200">
+      <animate attributeName="stroke-dashoffset" values="200; -200" dur="2s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Left Side: Shivering Person -->
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="-0.5,0; 0.5,0; -0.5,0" dur="0.12s" repeatCount="indefinite" />
+      
+      <!-- Legs & Boots -->
+      <g>
+        <path d="M 12 48 L 12 55" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+        <path d="M 18 48 L 18 55" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+        <path d="M 10 55 L 14 55 Q 14 57 12 57 L 10 57 Z" fill="url(#scarfGradCo)" />
+        <path d="M 16 55 L 20 55 Q 20 57 18 57 L 16 57 Z" fill="url(#scarfGradCo)" />
+      </g>
+
+      <!-- 3D Puffy Jacket with self-hugging arms -->
+      <g filter="url(#uiShadowCo)">
+        <!-- Torso -->
+        <rect x="10" y="36" width="10" height="13" rx="3" fill="url(#jacketGradCo)" filter="url(#softShadowCo)" />
+        
+        <!-- Left arm (layered underneath, crossing over torso rightwards) -->
+        <path d="M 10 38 C 7.5 38, 6.5 41.5, 8.5 43.5 C 10.5 45.5, 14 45.5, 17.5 43.5 Q 18.5 42.5, 18 41.5 C 17 40.5, 16 41.5, 15 42 C 12.5 43, 10 42, 9.8 40.5 C 9.7 39.5, 9.8 38.5, 10 38" fill="url(#scarfGradCo)" />
+        
+        <!-- Right arm (layered on top, crossing over torso leftwards in tight hug) -->
+        <path d="M 20 38 C 22.5 38, 23.5 41.5, 21.5 43.5 C 19.5 45.5, 16 46.5, 12.5 45.5 C 10.5 44.5, 9.8 43, 10.5 42 C 11.2 41, 12 41.5, 13 42 C 15.5 43, 18 42.5, 19.8 40.5 L 20 38" fill="url(#scarfGradCo)" />
+      </g>
+
+      <!-- Face with natural jawline & peeking curls -->
+      <g filter="url(#softShadowCo)">
+        <path d="M 10 24 L 20 24 L 20 27.5 Q 19.5 30.5 16.5 32.5 L 13.5 32.5 Q 10.5 30.5 10 27.5 Z" fill="url(#skinGradCo)" />
+
+        <!-- Curly sideburns and locks peeking out from beanie -->
+        <!-- Left side locks -->
+        <path d="M 9.5 24.5 C 9.0 25.5, 9.1 27.0, 9.7 28.0" fill="none" stroke="#451A03" stroke-width="0.35" stroke-linecap="round" />
+        <path d="M 9.9 24.5 C 9.5 25.3, 9.6 26.5, 10.1 27.2" fill="none" stroke="#CA8A04" stroke-width="0.25" stroke-linecap="round" opacity="0.8" />
+        <!-- Right side locks -->
+        <path d="M 20.5 24.5 C 21.0 25.5, 20.9 27.0, 20.3 28.0" fill="none" stroke="#451A03" stroke-width="0.35" stroke-linecap="round" />
+        <path d="M 20.1 24.5 C 20.5 25.3, 20.4 26.5, 19.9 27.2" fill="none" stroke="#CA8A04" stroke-width="0.25" stroke-linecap="round" opacity="0.8" />
+        <!-- Forehead peeking curls -->
+        <path d="M 11.5 24.5 Q 12.0 25.4, 12.8 25.0" fill="none" stroke="#451A03" stroke-width="0.45" stroke-linecap="round" />
+        <path d="M 11.7 24.3 Q 12.1 25.2, 12.7 24.9" fill="none" stroke="#CA8A04" stroke-width="0.25" stroke-linecap="round" />
+        <path d="M 18.5 24.5 Q 18.0 25.4, 17.2 25.0" fill="none" stroke="#451A03" stroke-width="0.45" stroke-linecap="round" />
+        <path d="M 18.3 24.3 Q 17.9 25.2, 17.3 24.9" fill="none" stroke="#CA8A04" stroke-width="0.25" stroke-linecap="round" />
+
+        <!-- Tense shivering eyebrows -->
+        <path d="M 11.2 26.5 Q 12.8 25.5, 14.2 26.3" fill="none" stroke="#451A03" stroke-width="0.5" stroke-linecap="round" opacity="0.8" />
+        <path d="M 15.8 26.3 Q 17.2 25.5, 18.8 26.5" fill="none" stroke="#451A03" stroke-width="0.5" stroke-linecap="round" opacity="0.8" />
+
+        <!-- Shivering eyes -->
+        <path d="M 11.5 27.8 Q 13 26.4 14.5 27.8" fill="none" stroke="#475569" stroke-width="0.8" stroke-linecap="round" />
+        <path d="M 15.5 27.8 Q 17 26.4 18.5 27.8" fill="none" stroke="#475569" stroke-width="0.8" stroke-linecap="round" />
+
+        <!-- Shivering tiny tense mouth -->
+        <path d="M 13.8 31.4 Q 14.4 31.8 15.0 31.4 Q 15.6 31.0 16.2 31.4" fill="none" stroke="#475569" stroke-width="0.65" stroke-linecap="round" />
+
+        <!-- Rosy Cheek Blush for Natural Skin Flush -->
+        <ellipse cx="12" cy="29.8" rx="1.5" ry="0.8" fill="#F43F5E" opacity="0.32" />
+        <ellipse cx="18" cy="29.8" rx="1.5" ry="0.8" fill="#F43F5E" opacity="0.32" />
+
+        <!-- Freezing cold nose - Natural shape but soft rosy finish -->
+        <ellipse cx="15.8" cy="29.4" rx="1.0" ry="1.3" fill="url(#noseGradCo)" stroke-width="0" />
+      </g>
+
+      <!-- Thick Scarf -->
+      <g filter="url(#uiShadowCo)">
+        <rect x="8" y="32" width="14" height="6" rx="2.5" fill="url(#scarfGradCo)" />
+        <path d="M 18 34 C 23 34 26 37 29 36 C 28 40 23 41 18 38 Z" fill="url(#scarfGradCo)" filter="url(#softShadowCo)">
+          <animateTransform attributeName="transform" type="rotate" values="-5 18 36; 5 18 36; -5 18 36" dur="0.6s" repeatCount="indefinite" />
+        </path>
+      </g>
+
+      <!-- Beanie Hat -->
+      <g filter="url(#uiShadowCo)">
+        <path d="M 9 24 C 9 13 21 13 21 24 Z" fill="url(#hatGradCo)" />
+        <rect x="7" y="21" width="16" height="4" rx="2" fill="url(#hatGradCo)" filter="url(#softShadowCo)" />
+        <circle cx="15" cy="14" r="3.5" fill="#FFFFFF" filter="url(#softShadowCo)" />
+      </g>
+    </g>
+
+    <!-- Frosty Breath Vapor -->
+    <g>
+      <circle cx="18" cy="32" r="3" fill="url(#breathGradCo)">
+        <animate attributeName="cx" values="18; 32" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="cy" values="32; 26" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="r" values="2; 7" dur="1.8s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0; 1; 0" keyTimes="0; 0.3; 1" dur="1.8s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="18" cy="32" r="3" fill="url(#breathGradCo)">
+        <animate attributeName="cx" values="18; 34" dur="1.8s" repeatCount="indefinite" begin="0.9s" />
+        <animate attributeName="cy" values="32; 29" dur="1.8s" repeatCount="indefinite" begin="0.9s" />
+        <animate attributeName="r" values="3; 9" dur="1.8s" repeatCount="indefinite" begin="0.9s" />
+        <animate attributeName="opacity" values="0; 1; 0" keyTimes="0; 0.3; 1" dur="1.8s" repeatCount="indefinite" begin="0.9s" />
+      </circle>
+    </g>
+
+    <!-- Right Side: Thermometer -->
+    <g transform="translate(48, 45)">
+      <circle cx="0" cy="0" r="7" fill="url(#rippleGradCo)" opacity="0">
+        <animateTransform attributeName="transform" type="scale" values="1; 2.8" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.8; 0" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="0" cy="0" r="7" fill="url(#rippleGradCo)" opacity="0">
+        <animateTransform attributeName="transform" type="scale" values="1; 2.8" dur="2s" repeatCount="indefinite" begin="1s" />
+        <animate attributeName="opacity" values="0.8; 0" dur="2s" repeatCount="indefinite" begin="1s" />
+      </circle>
+    </g>
+
+    <g filter="url(#uiShadowCo)">
+      <path d="M 44.5 16 C 44.5 13.5 46 12 48 12 C 50 12 51.5 13.5 51.5 16 L 51.5 37 C 53.5 38.5 55 41.5 55 45 C 55 49 52 52 48 52 C 44 52 41 49 41 45 C 41 41.5 42.5 38.5 44.5 37 Z" fill="url(#glassBodyCo)" />
+      <g>
+        <circle cx="48" cy="45" r="5.5" fill="url(#coldFluidCo)" />
+        <rect x="46" y="20" width="4" height="23" rx="2" fill="url(#coldFluidCo)">
+          <animate attributeName="y" values="22; 38; 22" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
+          <animate attributeName="height" values="23; 7; 23" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0; 0.5; 1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" />
+        </rect>
+        <ellipse cx="46.5" cy="43.5" rx="1.5" ry="2.5" fill="#FFFFFF" transform="rotate(-30 46.5 43.5)" opacity="0.6" />
+      </g>
+      <path d="M 45.5 16 C 45.5 14.5 46.5 13.5 48 13.5 C 49.5 13.5 50.5 14.5 50.5 16 L 50.5 37 C 52 38.5 53.5 41.5 53.5 45 C 53.5 48 51 50.5 48 50.5 C 45 50.5 42.5 48 42.5 45 C 42.5 41.5 44 38.5 45.5 37 Z" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.7" />
+      <g fill="#FFFFFF" opacity="0.8">
+        <rect x="52" y="18" width="2" height="1" rx="0.5" />
+        <rect x="52" y="23" width="3" height="1" rx="0.5" />
+        <rect x="52" y="28" width="2" height="1" rx="0.5" />
+        <rect x="52" y="33" width="3" height="1" rx="0.5" />
+      </g>
+    </g>
+
+    <!-- Foreground Wind Gust -->
+    <path d="M-10,48 C 10,48 20,54 35,48 C 45,44 55,48 74,48" fill="none" stroke="url(#windGradCo)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="60 140" stroke-dashoffset="200">
+      <animate attributeName="stroke-dashoffset" values="200; -200" dur="1.5s" repeatCount="indefinite" />
+    </path>
+  </g>
+</svg>
